@@ -1,7 +1,9 @@
 {
   "npm.packageManager": "bun",
+  "cSpell.language": "en,es",
   "cSpell.words": [
     "antares",
-    "devkit"
+    "devkit",
+    "oidc"
   ]
 }
