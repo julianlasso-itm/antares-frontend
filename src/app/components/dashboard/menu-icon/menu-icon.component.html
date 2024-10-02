@@ -1,0 +1,34 @@
+<div
+  class="menu-icons"
+  ngClass="{{ isMenuVisible ? 'menu-visible' : 'menu-hidden' }}"
+>
+  <button
+    mat-icon-button
+    (click)="menuToggle()"
+    matTooltip="Ocultar menú"
+    matTooltipPosition="after"
+  >
+    <mat-icon>menu_open</mat-icon>
+  </button>
+  @for (item of menu(); track $index) {
+  <button
+    mat-icon-button
+    (click)="(changeMenu(item.children))"
+    matTooltip="{{item.title}}"
+    matTooltipPosition="after"
+  >
+    <mat-icon>{{item.icon}}</mat-icon>
+  </button>
+  }
+</div>
+
+<div
+  class="float-button"
+  ngClass="{{ isMenuVisible ? 'float-button-hidden' : 'float-button-visible' }}"
+>
+  <a (click)="menuToggle()">
+    <mat-icon matTooltip="Mostrar menú" matTooltipPosition="after">
+      chevron_right
+    </mat-icon>
+  </a>
+</div>

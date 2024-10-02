@@ -1,0 +1,24 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  background-color: #f8fafc;
+  width: 250px;
+  height: 100%;
+
+  a[mat-button],
+  button[mat-button] {
+    justify-content: start;
+    color: var(--mdc-icon-button-icon-color);
+  }
+
+  a,
+  button {
+    justify-content: start;
+  }
+}
+
+.hidden {
+  display: none;
+}

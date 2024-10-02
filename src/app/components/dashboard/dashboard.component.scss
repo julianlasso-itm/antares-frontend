@@ -1,0 +1,47 @@
+.body {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 12;
+    background-color: #ffffff;
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 16px;
+
+        .header {
+          display: flex;
+
+          h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0;
+            margin-bottom: 16px;
+          }
+
+          .spacer {
+            flex-grow: 1;
+          }
+        }
+
+        .content {
+          width: 100%;
+          height: calc(100vh - (154px + 16px));
+          overflow: auto;
+          padding-top: 16px;
+        }
+      }
+    }
+  }
+}

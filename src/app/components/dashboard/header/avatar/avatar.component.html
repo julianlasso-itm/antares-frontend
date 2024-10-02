@@ -1,0 +1,18 @@
+<div
+  class="user-avatar"
+  [matMenuTriggerFor]="menu"
+  matTooltip="Julian Andres Lasso Figueroa"
+>
+  <img src="images/julian.avif" alt="Avatar" />
+</div>
+<mat-menu #menu="matMenu">
+  <button type="button" mat-menu-item (click)="openDialogProfile()">
+    <mat-icon>account_circle</mat-icon>
+    <span>Mi perfil</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button type="button" mat-menu-item (click)="logOut()">
+    <mat-icon>logout</mat-icon>
+    <span>Cerrar sesión</span>
+  </button>
+</mat-menu>

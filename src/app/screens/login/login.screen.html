@@ -1,0 +1,23 @@
+@if (!profile) {
+  <div class="background">
+    <div class="shape-1"></div>
+    <div class="shape-2"></div>
+    <div class="shape-3"></div>
+  </div>
+  <div class="content">
+    <h1>Welcome to ANTARES</h1>
+    <h2>
+      Assessment Network for Technical Aptitude and Resource Evaluation System
+    </h2>
+    <p>
+      <button mat-button color="primary" (click)="signIn()">
+        <mat-icon svgIcon="google"></mat-icon>
+        INICIAR SESIÓN CON GOOGLE
+      </button>
+    </p>
+  </div>
+} @else {
+  <div class="background spinner">
+    <mat-spinner color="primary"></mat-spinner>
+  </div>
+}

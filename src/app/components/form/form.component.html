@@ -1,0 +1,46 @@
+<form autocomplete="off" [formGroup]="form()">
+  @for (field of info(); track $index) { @switch (field.type) { @case
+  (typeInput.HIDDEN) {
+  <input type="hidden" name="{{ field.field }}" [formGroupName]="field.field" />
+  } @case (typeInput.SELECT) {
+  <mat-form-field class="width-100 margin-bottom-5">
+    <mat-label>{{ field.label }}</mat-label>
+    <mat-select
+      formControlName="{{ field.field }}"
+      (selectionChange)="field?.selectionChange($event.value, this.form)"
+    >
+      @for (option of field.loadOptions ? field.loadOptions() : []; track
+      $index) {
+      <mat-option [value]="getOptionValue(option)">
+        {{ getOptionLabel(option) }}
+      </mat-option>
+      }
+    </mat-select>
+    <mat-icon matSuffix>{{ field.icon }}</mat-icon>
+    @if (this.form().invalid) {
+    <mat-error>{{ errorMessage($index, field) }}</mat-error>
+    }
+  </mat-form-field>
+  } @case(typeInput.SLIDE_TOGGLE) {
+  <div class="width-100 margin-bottom-5">
+    <mat-slide-toggle labelPosition="before" [formControlName]="field.field">
+      {{ field.label }}
+    </mat-slide-toggle>
+  </div>
+  } @default {
+  <mat-form-field class="width-100 margin-bottom-5">
+    <mat-label>{{ field.label }}</mat-label>
+    <input
+      matInput
+      type="{{ field.type }}"
+      name="{{ field.field }}"
+      [formControlName]="field.field"
+      placeholder="{{ field.placeholder }}"
+    />
+    <mat-icon matSuffix>{{ field.icon }}</mat-icon>
+    @if (this.form().invalid) {
+    <mat-error>{{ errorMessage($index, field) }}</mat-error>
+    }
+  </mat-form-field>
+  } } }
+</form>

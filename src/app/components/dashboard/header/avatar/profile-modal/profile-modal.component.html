@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Perfil del usuario</h2>
+<mat-dialog-content class="content">
+  <div class="avatar">
+    <img src="images/julian.avif" alt="Avatar" />
+    <button type="button" mat-mini-fab color="accent">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+  <form>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Nombre"
+        value="Julian Andres Lasso Figueroa"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Correo"
+        value="ingeniero.julianlasso@gmail.com"
+        disabled="true"
+      />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="(true)">Modificar</button>
+  <button mat-flat-button type="button" color="primary" mat-dialog-close>
+    Cerrar
+  </button>
+</mat-dialog-actions>

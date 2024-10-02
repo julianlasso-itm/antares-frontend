@@ -1,0 +1,23 @@
+<mat-table [dataSource]="dataSource()">
+  @for (column of displayedColumns(); track $index) {
+    <ng-container matColumnDef="{{ column }}">
+      <mat-header-cell *matHeaderCellDef> {{ column }}</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        @if (isActionColumn(element, $index)) {
+          @for (action of getArrayActions(element, $index); track $index) {
+            <button mat-icon-button (click)="handleAction($event, element, action)" matTooltip="{{ action.tooltip }}">
+              <mat-icon>{{ action.icon }}</mat-icon>
+            </button>
+          }
+        } @else {
+          {{ getElementColumn(element, $index) }}
+        }
+      </mat-cell>
+    </ng-container>
+  }
+  <mat-header-row *matHeaderRowDef="displayedColumns()"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns()"></mat-row>
+</mat-table>
+
+<mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" (page)="handlePageEvent($event)">
+</mat-paginator>

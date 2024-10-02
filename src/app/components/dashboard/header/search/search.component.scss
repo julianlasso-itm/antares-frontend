@@ -1,0 +1,26 @@
+.search-input {
+  display: flex;
+  flex-direction: row;
+  background-color: #f1f5f9;
+  padding: 16px;
+  border-radius: 999999999px;
+  width: 650px;
+
+  mat-icon {
+    margin-right: 8px;
+  }
+
+  input {
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: var(--mat-form-field-container-text-size);
+    font-family: var(--mat-form-field-container-text-font);
+    font-weight: var(---mat-form-field-container-text-weight);
+  }
+
+  input:focus-visible,
+  input:focus {
+    outline: none;
+  }
+}

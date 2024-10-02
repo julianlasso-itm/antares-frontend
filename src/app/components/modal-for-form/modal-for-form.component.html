@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  <app-form
+    [form]="data.form"
+    [data]="data.data"
+    [type]="data.typeForm"
+    (setForm)="setForm($event)"
+  ></app-form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    type="button"
+    color="primary"
+    [disabled]="form().invalid"
+    (click)="data.submit(form().value)"
+  >
+    {{ data.action }}
+  </button>
+</mat-dialog-actions>

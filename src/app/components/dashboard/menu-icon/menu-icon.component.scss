@@ -1,0 +1,67 @@
+:host(.menu-visible) {
+  transform: translateX(0);
+  width: 72px;
+  transition: transform 250ms ease-in-out, width 250ms ease-in-out;
+}
+
+:host(.menu-hidden) {
+  transform: translateX(-100%);
+  width: 0px;
+  transition: transform 250ms ease-in-out, width 250ms ease-in-out;
+}
+
+.menu-visible {
+  transform: translateX(0);
+  transition: transform 250ms ease-in-out;
+}
+
+.menu-hidden {
+  transform: translateX(-100%);
+  transition: transform 250ms ease-in-out;
+}
+
+.menu-icons {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  background-color: #e2e8f0;
+  width: fit-content;
+  padding: 16px;
+  height: calc(100vh - 32px);
+
+  button {
+    margin-bottom: 16px;
+  }
+
+  button:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.float-button {
+  position: fixed;
+  bottom: calc(50% - 20px);
+  right: 100%;
+  z-index: 1000;
+  background-color: #e2e8f0;
+  padding: 8px 0px 4px 0px;
+  border-radius: 0 16px 16px 0;
+  cursor: pointer;
+}
+
+.float-button:hover {
+  background-color: #d3d3d3;
+}
+
+.float-button-visible {
+  right: -24px;
+  opacity: 1;
+  transition: right 250ms ease-in-out, opacity 250ms ease-in-out;
+}
+
+.float-button-hidden {
+  right: 100%;
+  opacity: 0;
+  transition: right 250ms ease-in-out, opacity 250ms ease-in-out;
+}

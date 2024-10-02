@@ -1,0 +1,27 @@
+<div class="menu">
+  <mat-list class="width-100">
+    @for (item of menu(); track $index) { @if (isMenuSeparator(item)) {
+    <mat-divider></mat-divider>
+    } @else {
+    <mat-list-item>
+      <a
+        mat-button
+        class="width-100"
+        [routerLink]="getLink(item)"
+        routerLinkActive="hidden"
+      >
+        <mat-icon>{{ getIcon(item) }}</mat-icon>
+        <div>{{ getTitle(item) }}</div>
+      </a>
+      <a
+        mat-flat-button
+        class="width-100"
+        [routerLink]="getLink(item)"
+      >
+        <mat-icon>{{ getIcon(item) }}</mat-icon>
+        <div>{{ getTitle(item) }}</div>
+      </a>
+    </mat-list-item>
+    } }
+  </mat-list>
+</div>
