@@ -26,12 +26,15 @@ export class ModalForFormComponent {
     this.form = signal(new FormGroup({}));
   }
 
-  // ngOnInit(): void {
-  //   console.log('data', this.data);
-  // }
-
   setForm(form: WritableSignal<FormGroup>): void {
     this.form.set(form());
-    // console.log('form', this.form());
+  }
+
+  close(): void {
+    this.form.update((form) => {
+      form.reset();
+      return form;
+    });
+    this.dialogRef.close();
   }
 }
