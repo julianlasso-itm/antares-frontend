@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class HttpService {
   private readonly httpClient = inject(HttpClient);
 
   constructor() {
-    this.urlBase = 'http://localhost:3000';
+    this.urlBase = environment.apiUrl;
   }
 
   public get<TResponse>(
@@ -30,7 +31,10 @@ export class HttpService {
     params?: HttpParams,
     headers?: HttpHeaders
   ): Observable<TResponse> {
-    return this.httpClient.post<TResponse>(url, body, { headers, params });
+    return this.httpClient.post<TResponse>(this.urlBase + url, body, {
+      headers,
+      params,
+    });
   }
 
   public put<TRequest, TResponse>(
@@ -39,7 +43,10 @@ export class HttpService {
     params?: HttpParams,
     headers?: HttpHeaders
   ): Observable<TResponse> {
-    return this.httpClient.put<TResponse>(url, body, { headers, params });
+    return this.httpClient.put<TResponse>(this.urlBase + url, body, {
+      headers,
+      params,
+    });
   }
 
   public delete<TResponse>(
@@ -47,6 +54,9 @@ export class HttpService {
     params?: HttpParams,
     headers?: HttpHeaders
   ): Observable<TResponse> {
-    return this.httpClient.delete<TResponse>(url, { headers, params });
+    return this.httpClient.delete<TResponse>(this.urlBase + url, {
+      headers,
+      params,
+    });
   }
 }
