@@ -9,10 +9,12 @@
           <h1>{{ title() }}</h1>
           <div class="spacer"></div>
           <div class="actions">
-            <button mat-flat-button color="primary" (click)="token()">
-              <mat-icon class="material-symbols-rounded">add</mat-icon>
-              Agregar
-            </button>
+            @if (buttonAddVisible()) {
+              <button mat-flat-button color="primary" (click)="buttonAddAction()()">
+                <mat-icon class="material-symbols-rounded">add</mat-icon>
+                Agregar
+              </button>
+            }
           </div>
         </div>
         <mat-divider></mat-divider>

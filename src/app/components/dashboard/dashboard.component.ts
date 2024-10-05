@@ -6,18 +6,20 @@ import {
   OnInit,
   signal,
   Signal,
+  WritableSignal,
 } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../services/auth-google.service';
 import { AuthStorageService } from '../../services/auth-storage.service';
+import { ButtonAddService } from '../../services/button-add.service';
+import { MenuService } from '../../services/menu.service';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 
-import { MenuService } from '../../services/menu.service';
 import { HeaderComponent } from './header/header.component';
 import { MenuIconComponent } from './menu-icon/menu-icon.component';
 import { MenuComponent } from './menu/menu.component';
@@ -43,16 +45,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly authStorageService = inject(AuthStorageService);
   private readonly menuService = inject(MenuService);
   private readonly router = inject(Router);
+  private readonly buttonAddService = inject(ButtonAddService);
   public profile: Record<string, unknown>;
   public title: Signal<string>;
   private storageService: Subscription;
   private titleService: Subscription;
+  private buttonAddVisibleService: Subscription;
+  private buttonAddActionService: Subscription;
+  readonly buttonAddVisible: WritableSignal<boolean>;
+  readonly buttonAddAction: WritableSignal<Function>;
 
   constructor() {
     this.profile = {};
     this.title = signal('');
     this.storageService = new Subscription();
     this.titleService = new Subscription();
+    this.buttonAddVisible = signal(false);
+    this.buttonAddAction = signal(() => {});
+    this.buttonAddVisibleService = new Subscription();
+    this.buttonAddActionService = new Subscription();
   }
 
   ngOnInit(): void {
@@ -69,11 +80,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
       });
     this.showData();
+
+    this.buttonAddVisibleService = this.buttonAddService.visible$.subscribe({
+      next: (visible: boolean) => {
+        this.buttonAddVisible.set(visible);
+      },
+    });
+
+    this.buttonAddActionService = this.buttonAddService.action$.subscribe({
+      next: (action: Function) => {
+        this.buttonAddAction.set(action);
+      },
+    });
   }
 
   ngOnDestroy(): void {
     this.storageService.unsubscribe();
     this.titleService.unsubscribe();
+    this.buttonAddVisibleService.unsubscribe();
+    this.buttonAddActionService.unsubscribe();
   }
 
   showData(): void {
@@ -83,9 +108,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
   logOut(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
-  }
-
-  token(): void {
-    console.log(this.authService.getToken());
   }
 }
