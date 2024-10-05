@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ButtonAddService } from '../../../services/button-add.service';
 
 @Component({
   selector: 'app-technology-stack',
@@ -7,4 +8,13 @@ import { Component } from '@angular/core';
   templateUrl: './technology-stack.component.html',
   styleUrl: './technology-stack.component.scss',
 })
-export class TechnologyStackComponent {}
+export class TechnologyStackComponent {
+  private readonly _buttonAddService = inject(ButtonAddService);
+
+  constructor() {
+    this._buttonAddService.visible = true;
+    this._buttonAddService.action = () => {
+      console.log('Agregar');
+    };
+  }
+}

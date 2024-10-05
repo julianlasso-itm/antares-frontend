@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ButtonAddService } from '../../../services/button-add.service';
 
 @Component({
   selector: 'app-domain-knowledge-levels',
@@ -7,4 +8,13 @@ import { Component } from '@angular/core';
   templateUrl: './domain-knowledge-levels.component.html',
   styleUrl: './domain-knowledge-levels.component.scss',
 })
-export class DomainKnowledgeLevelsComponent {}
+export class DomainKnowledgeLevelsComponent {
+  private readonly _buttonAddService = inject(ButtonAddService);
+
+  constructor() {
+    this._buttonAddService.visible = true;
+    this._buttonAddService.action = () => {
+      console.log('Agregar');
+    };
+  }
+}

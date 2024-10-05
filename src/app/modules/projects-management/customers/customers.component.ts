@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ButtonAddService } from '../../../services/button-add.service';
 
 @Component({
   selector: 'app-customers',
@@ -7,4 +8,13 @@ import { Component } from '@angular/core';
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
 })
-export class CustomersComponent {}
+export class CustomersComponent {
+  private readonly _buttonAddService = inject(ButtonAddService);
+
+  constructor() {
+    this._buttonAddService.visible = true;
+    this._buttonAddService.action = () => {
+      console.log('Agregar');
+    };
+  }
+}

@@ -35,5 +35,6 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this._buttonAddService.visible = false;
+    this._buttonAddService.action = () => {};
   }
 }

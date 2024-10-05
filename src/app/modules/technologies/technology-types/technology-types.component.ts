@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ButtonAddService } from '../../../services/button-add.service';
 
 @Component({
   selector: 'app-technology-types',
@@ -7,4 +8,13 @@ import { Component } from '@angular/core';
   templateUrl: './technology-types.component.html',
   styleUrl: './technology-types.component.scss',
 })
-export class TechnologyTypesComponent {}
+export class TechnologyTypesComponent {
+  private readonly _buttonAddService = inject(ButtonAddService);
+
+  constructor() {
+    this._buttonAddService.visible = true;
+    this._buttonAddService.action = () => {
+      console.log('Agregar');
+    };
+  }
+}
