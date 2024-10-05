@@ -1,18 +1,20 @@
 import { Routes } from '@angular/router';
 
-import { routesDashboard } from './components';
-import { authGuard } from './guards';
-import { LoginScreen } from './screens/login';
+import { routesDashboard } from './components/dashboard/dashboard.routing';
+
+import { authGuard } from './guards/auth.guard';
+
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
   {
     path: 'login',
-    component: LoginScreen,
+    component: LoginComponent,
   },
   {
     path: '',
     loadComponent: () =>
-      import('./components/dashboard').then(
+      import('./components/dashboard/dashboard.component').then(
         (component) => component.DashboardComponent
       ),
     canActivate: [authGuard],

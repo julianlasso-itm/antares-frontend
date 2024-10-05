@@ -6,7 +6,7 @@ import { OAuthStorage, provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { routes } from './app.routes';
 
-import { AuthStorageService } from './services';
+import { AuthStorageService } from './services/auth-storage.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

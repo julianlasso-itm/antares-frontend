@@ -27,84 +27,118 @@ export const menuStruct: MenuStruct[] = [
       {
         title: 'Dashboard',
         titleWindow:
-          'ANTARES :: Assessment Network for Technical Aptitude and Resource Evaluation System',
+          'ANTARES - Assessment Network for Technical Aptitude and Resource Evaluation System',
         path: 'dashboard',
         icon: 'dashboard',
         loadComponent: () =>
-          import('./components').then((component) => component.HomeComponent),
-      },
-      {},
-      {
-        title: 'Clientes',
-        path: 'customers',
-        icon: 'people',
-        loadComponent: () =>
-          import('./modules').then((component) => component.CustomersComponent),
-      },
-      {
-        title: 'Equipos',
-        path: 'squads',
-        icon: 'group',
-        loadComponent: () =>
-          import('./modules').then((component) => component.SquadsComponent),
-      },
-      {},
-      {
-        title: 'Profesionales',
-        path: 'professionals',
-        icon: 'people',
-        loadComponent: () =>
-          import('./modules').then(
-            (component) => component.ProfessionalsComponent
+          import('./modules/home/home.component').then(
+            (component) => component.HomeComponent
           ),
       },
-      {
-        title: 'Habilidades',
-        path: 'skills',
-        icon: 'build',
-        loadComponent: () =>
-          import('./modules').then((component) => component.SkillsComponent),
-      },
-      {
-        title: 'Roles',
-        path: 'roles',
-        icon: 'lock',
-        loadComponent: () =>
-          import('./modules').then((component) => component.RolesComponent),
-      },
-      {},
-      {
-        title: 'Preguntas',
-        path: 'questions',
-        icon: 'help',
-        loadComponent: () =>
-          import('./modules').then((component) => component.QuestionsComponent),
-      },
-      {},
+      // {},
       {
         title: 'Evaluaciones',
         path: 'assessments',
         icon: 'assignment',
         loadComponent: () =>
-          import('./modules').then(
-            (component) => component.AssessmentsComponent
+          import(
+            './modules/assessments/assessments/assessments.component'
+          ).then((component) => component.AssessmentsComponent),
+      },
+      {
+        title: 'Brechas de conocimiento',
+        path: 'knowledge-gaps',
+        icon: 'network_intelligence_update',
+        loadComponent: () =>
+          import(
+            './modules/knowledge-gaps/knowledge-gaps/knowledge-gaps.component'
+          ).then((component) => component.KnowledgeGapsComponent),
+      },
+    ],
+  },
+  {
+    title: 'Proyectos',
+    icon: 'widgets',
+    path: 'projects',
+    children: [
+      {
+        title: 'Clientes',
+        path: 'projects/customers',
+        icon: 'people',
+        loadComponent: () =>
+          import(
+            './modules/projects-management/customers/customers.component'
+          ).then((component) => component.CustomersComponent),
+      },
+      {
+        title: 'Proyectos',
+        path: 'projects/projects',
+        icon: 'inventory',
+        loadComponent: () =>
+          import(
+            './modules/projects-management/projects/projects.component'
+          ).then((component) => component.ProjectsComponent),
+      },
+      {
+        title: 'Roles',
+        path: 'projects/roles',
+        icon: 'verified_user',
+        loadComponent: () =>
+          import('./modules/projects-management/roles/roles.component').then(
+            (component) => component.RolesComponent
           ),
       },
       {
-        title: 'Resultados',
-        path: 'results',
-        icon: 'bar_chart',
+        title: 'Profesionales',
+        path: 'projects/professionals',
+        icon: 'groups',
         loadComponent: () =>
-          import('./modules').then((component) => component.ResultsComponent),
+          import(
+            './modules/projects-management/role-per-professional/role-per-professional.component'
+          ).then((component) => component.RolePerProfessionalComponent),
       },
       {
-        title: 'Cierre de brechas',
-        path: 'gap-closure',
-        icon: 'build',
+        title: 'Stack tecnológico',
+        path: 'projects/technology-stack',
+        icon: 'settings',
         loadComponent: () =>
-          import('./modules').then(
-            (component) => component.GapClosureComponent
-          ),
+          import(
+            './modules/projects-management/technology-stack/technology-stack.component'
+          ).then((component) => component.TechnologyStackComponent),
+      },
+    ],
+  },
+  {
+    title: 'Dominios de Conocimiento',
+    icon: 'build',
+    path: 'technologies',
+    children: [
+      {
+        title: 'Tipos de tecnologías',
+        path: 'technologies/types',
+        icon: 'auto_stories',
+        loadComponent: () =>
+          import(
+            './modules/technologies/technology-types/technology-types.component'
+          ).then((component) => component.TechnologyTypesComponent),
+      },
+      {
+        title: 'Tecnologías',
+        path: 'technologies/technologies',
+        icon: 'military_tech',
+        loadComponent: () =>
+          import(
+            './modules/technologies/technology-items/technology-items.component'
+          ).then((component) => component.TechnologyItemsComponent),
+      },
+      {
+        title: 'Dominios de Conocimiento',
+        path: 'technologies/domains',
+        icon: 'domain_verification',
+        loadComponent: () =>
+          import(
+            './modules/domain-knowledge/domain-knowledge/domain-knowledge.component'
+          ).then((component) => component.DomainKnowledgeComponent),
       },
     ],
   },
@@ -112,10 +146,7 @@ export const menuStruct: MenuStruct[] = [
   //   title: 'Reportes',
   //   icon: 'description',
   //   path: 'reports',
-  //   children: [
-  //     {
-  //     },
-  //   ],
+  //   children: [],
   // },
   {
     title: 'Configuración del sistema',
@@ -123,21 +154,21 @@ export const menuStruct: MenuStruct[] = [
     path: 'settings',
     children: [
       {
+        title: 'Configuraciones',
+        icon: 'settings',
+        path: 'settings/configurations',
+        loadComponent: () =>
+          import(
+            './modules/settings/configurations/configurations.component'
+          ).then((component) => component.ConfigurationsComponent),
+      },
+      {
         title: 'Usuarios',
         path: 'settings/users',
         icon: 'people',
         loadComponent: () =>
-          import('./modules/security').then(
-            (component) => component.UsersComponent
-          ),
-      },
-      {
-        title: 'Roles',
-        path: 'settings/roles',
-        icon: 'lock',
-        loadComponent: () =>
-          import('./modules/security').then(
-            (component) => component.RolesComponent
+          import('./modules/security/users/users.component').then(
+            (component) => component.SecurityUsersComponent
           ),
       },
     ],
