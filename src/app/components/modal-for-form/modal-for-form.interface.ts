@@ -23,7 +23,7 @@ export interface FormField {
   placeholder?: string;
   errors?: Array<IError>;
   icon?: string;
-  formControl?: WritableSignal<FormControl>;
+  formControl: WritableSignal<FormControl>;
   loadOptions?: WritableSignal<Array<object>>;
   selectionChange?: (...args: any) => void;
   options?: Array<any>;

@@ -6,7 +6,7 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { FormComponent } from '../form';
+import { FormComponent } from '../form/form.component';
 import { IModalForForm } from './modal-for-form.interface';
 
 @Component({
@@ -26,12 +26,12 @@ export class ModalForFormComponent {
     this.form = signal(new FormGroup({}));
   }
 
-  ngOnInit(): void {
-    console.log('data', this.data);
-  }
+  // ngOnInit(): void {
+  //   console.log('data', this.data);
+  // }
 
   setForm(form: WritableSignal<FormGroup>): void {
     this.form.set(form());
-    console.log('form', this.form());
+    // console.log('form', this.form());
   }
 }

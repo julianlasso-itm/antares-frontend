@@ -3,8 +3,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
-  OnInit,
   Output,
   signal,
   WritableSignal,
@@ -23,7 +21,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Subscription } from 'rxjs';
-import { FormField, TypeForm, TypeInput } from '../modal-for-form';
+import {
+  FormField,
+  TypeForm,
+  TypeInput,
+} from '../modal-for-form/modal-for-form.interface';
 
 @Component({
   selector: 'app-form',
@@ -47,7 +49,7 @@ import { FormField, TypeForm, TypeInput } from '../modal-for-form';
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
 })
-export class FormComponent implements OnInit, OnDestroy {
+export class FormComponent {
   @Input({ alias: 'form', required: true }) info: WritableSignal<
     Array<FormField>
   >;
@@ -73,7 +75,7 @@ export class FormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createForm();
     this.formSubscription = this.form().valueChanges.subscribe((value) => {
-      console.log('form subscription', value);
+      // console.log('form subscription', value);
       this.setFrom();
     });
   }
@@ -107,7 +109,7 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   errorMessage(index: number, field: FormField): string {
-    if (field.formControl) {
+    if (field.formControl()) {
       const control = this.form().get(field.field);
       for (const key in control?.errors) {
         if (control?.errors.hasOwnProperty(key)) {

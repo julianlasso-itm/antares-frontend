@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal, Signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  Signal,
+} from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -32,18 +39,20 @@ import { MenuComponent } from './menu/menu.component';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  public profile: Record<string, unknown> = {};
+  private readonly authService = inject(AuthService);
+  private readonly authStorageService = inject(AuthStorageService);
+  private readonly menuService = inject(MenuService);
+  private readonly router = inject(Router);
+  public profile: Record<string, unknown>;
   public title: Signal<string>;
-  private storageService: Subscription = new Subscription();
-  private titleService: Subscription = new Subscription();
+  private storageService: Subscription;
+  private titleService: Subscription;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private authStorageService: AuthStorageService,
-    private menuService: MenuService
-  ) {
+  constructor() {
+    this.profile = {};
     this.title = signal('');
+    this.storageService = new Subscription();
+    this.titleService = new Subscription();
   }
 
   ngOnInit(): void {
@@ -74,5 +83,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   logOut(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  token(): void {
+    console.log(this.authService.getToken());
   }
 }

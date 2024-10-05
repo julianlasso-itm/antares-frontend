@@ -16,7 +16,9 @@
       </mat-option>
       }
     </mat-select>
-    <mat-icon matSuffix>{{ field.icon }}</mat-icon>
+    <mat-icon class="material-symbols-rounded" matSuffix>{{
+      field.icon
+    }}</mat-icon>
     @if (this.form().invalid) {
     <mat-error>{{ errorMessage($index, field) }}</mat-error>
     }
@@ -37,7 +39,9 @@
       [formControlName]="field.field"
       placeholder="{{ field.placeholder }}"
     />
-    <mat-icon matSuffix>{{ field.icon }}</mat-icon>
+    <mat-icon class="material-symbols-rounded" matSuffix>{{
+      field.icon
+    }}</mat-icon>
     @if (this.form().invalid) {
     <mat-error>{{ errorMessage($index, field) }}</mat-error>
     }

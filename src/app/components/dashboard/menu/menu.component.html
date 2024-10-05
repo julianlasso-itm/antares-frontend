@@ -10,15 +10,15 @@
         [routerLink]="getLink(item)"
         routerLinkActive="hidden"
       >
-        <mat-icon>{{ getIcon(item) }}</mat-icon>
+        <mat-icon class="material-symbols-rounded">{{
+          getIcon(item)
+        }}</mat-icon>
         <div>{{ getTitle(item) }}</div>
       </a>
-      <a
-        mat-flat-button
-        class="width-100"
-        [routerLink]="getLink(item)"
-      >
-        <mat-icon>{{ getIcon(item) }}</mat-icon>
+      <a mat-flat-button class="width-100" [routerLink]="getLink(item)">
+        <mat-icon class="material-symbols-rounded">{{
+          getIcon(item)
+        }}</mat-icon>
         <div>{{ getTitle(item) }}</div>
       </a>
     </mat-list-item>

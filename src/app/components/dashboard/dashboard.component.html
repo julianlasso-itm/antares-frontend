@@ -1,5 +1,5 @@
 <div class="body">
-  <app-menu-icon></app-menu-icon>
+  <app-menu-icon class="menu-icon"></app-menu-icon>
   <app-menu></app-menu>
   <div class="main-content">
     <app-header [logOut]="logOut.bind(this)"></app-header>
@@ -9,8 +9,8 @@
           <h1>{{ title() }}</h1>
           <div class="spacer"></div>
           <div class="actions">
-            <button mat-flat-button color="primary" (click)="(true)">
-              <mat-icon>add</mat-icon>
+            <button mat-flat-button color="primary" (click)="token()">
+              <mat-icon class="material-symbols-rounded">add</mat-icon>
               Agregar
             </button>
           </div>

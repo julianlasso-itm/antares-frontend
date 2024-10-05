@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -20,7 +20,9 @@ import { NotificationsModalComponent } from './notifications-modal/notifications
   styleUrl: './notifications.component.scss',
 })
 export class NotificationsComponent {
-  constructor(private dialog: MatDialog) {}
+  private readonly dialog = inject(MatDialog);
+
+  constructor() {}
 
   openDialog() {
     this.dialog.open(NotificationsModalComponent, {

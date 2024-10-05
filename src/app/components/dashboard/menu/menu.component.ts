@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal, Signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  Signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -22,10 +29,11 @@ import { MenuService } from '../../../services/menu.service';
   styleUrl: './menu.component.scss',
 })
 export class MenuComponent implements OnInit, OnDestroy {
+  private readonly menuService = inject(MenuService);
   private menuObserver: Subscription;
   menu: Signal<MenuElement[]>;
 
-  constructor(private menuService: MenuService) {
+  constructor() {
     this.menu = signal([]);
     this.menuObserver = new Subscription();
   }

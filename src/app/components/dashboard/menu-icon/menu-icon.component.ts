@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostBinding, OnInit, signal, Signal } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  inject,
+  OnInit,
+  signal,
+  Signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -22,9 +29,12 @@ import { MenuService } from '../../../services/menu.service';
 export class MenuIconComponent implements OnInit {
   @HostBinding('class.menu-visible') isMenuVisible = true;
   @HostBinding('class.menu-hidden') isMenuHidden = false;
+
+  private readonly menuService = inject(MenuService);
+  private readonly router = inject(Router);
   menu: Signal<MenuStruct[]>;
 
-  constructor(private menuService: MenuService, private router: Router) {
+  constructor() {
     this.menu = signal(menuStruct);
   }
 
