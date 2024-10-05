@@ -18,6 +18,7 @@ export class AuthService {
       clientId:
         '166154982577-5kbga8vkagep2jbuk8r0l99b6b5edinf.apps.googleusercontent.com',
       redirectUri: window.location.origin + '/dashboard',
+      scope: 'openid email profile',
     };
 
     this.oAuthService.configure(authConfig);
@@ -41,7 +42,7 @@ export class AuthService {
   }
 
   getToken(): string {
-    return this.oAuthService.getAccessToken();
+    return this.oAuthService.getIdToken();
   }
 
   isAuthenticated(): boolean {
