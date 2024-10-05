@@ -14,6 +14,7 @@ import {
   TypeInput,
 } from '../../../components/modal-for-form/modal-for-form.interface';
 import { TableComponent } from '../../../components/table/table.component';
+import { ButtonAddService } from '../../../services/button-add.service';
 import { HttpService } from '../../../services/http.service';
 import { IResponse } from '../../response.interface';
 import { IAction, IConfiguration } from './configuration.interface';
@@ -36,6 +37,7 @@ export class ConfigurationsComponent {
   private readonly _httpService = inject(HttpService);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _dialog = inject(MatDialog);
+  private readonly _buttonAddService = inject(ButtonAddService);
   private readonly createModal: WritableSignal<
     MatDialogConfig<IModalForForm<IConfiguration>>
   >;
@@ -61,6 +63,7 @@ export class ConfigurationsComponent {
   }
 
   ngOnInit(): void {
+    this._buttonAddService.visible = false;
     this.loading.set(true);
     this.getCustomers = this._httpService
       .get<IResponse<IConfiguration[]>>(this._urlCustomers)
@@ -70,6 +73,10 @@ export class ConfigurationsComponent {
             configuration.actions = this.getActions(configuration);
           });
           this.dataSource.set(response.value);
+          this._buttonAddService.visible = true;
+          this._buttonAddService.action = () => {
+            this.createConfiguration();
+          };
         },
         error: (error) => {
           this._snackBar.open(
