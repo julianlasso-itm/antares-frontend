@@ -6,14 +6,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class HttpService {
+  private readonly urlBase: string;
   private readonly httpClient = inject(HttpClient);
+
+  constructor() {
+    this.urlBase = 'http://localhost:3000';
+  }
 
   public get<TResponse>(
     url: string,
     params?: HttpParams,
     headers?: HttpHeaders
   ): Observable<TResponse> {
-    return this.httpClient.get<TResponse>(url, { headers, params });
+    return this.httpClient.get<TResponse>(this.urlBase + url, {
+      headers,
+      params,
+    });
   }
 
   public post<TRequest, TResponse>(

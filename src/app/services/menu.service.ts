@@ -8,12 +8,14 @@ import { MenuElement } from '../menu.struct';
 export class MenuService {
   private _title: string;
   private _menu: MenuElement[];
-  private readonly _menu$ = new BehaviorSubject<MenuElement[]>([]);
-  private readonly _title$ = new BehaviorSubject<string>('');
+  private readonly _menu$: BehaviorSubject<MenuElement[]>;
+  private readonly _title$: BehaviorSubject<string>;
 
   constructor() {
     this._menu = [];
     this._title = '';
+    this._menu$ = new BehaviorSubject<MenuElement[]>([]);
+    this._title$ = new BehaviorSubject<string>('');
   }
 
   get menu$(): Observable<MenuElement[]> {
