@@ -6,7 +6,7 @@ import {
   MaybeAsync,
   RouterStateSnapshot,
 } from '@angular/router';
-import { MenuService } from '../services';
+import { MenuService } from '../services/menu.service';
 
 export const titleGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,

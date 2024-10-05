@@ -7,7 +7,8 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthService, AuthStorageService } from '../services';
+import { AuthService } from '../services/auth-google.service';
+import { AuthStorageService } from '../services/auth-storage.service';
 
 export const authGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
