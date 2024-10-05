@@ -4,7 +4,7 @@
       "files": ["*.html"],
       "options": {
         "parser": "angular",
-        "printWidth": 120
+        "printWidth": 80
       }
     }
   ]

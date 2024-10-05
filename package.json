@@ -1,7 +1,7 @@
 {
   "name": "antares",
   "version": "1.0.0-alpha",
-  "description": "ANTARES - Assessment Network for Technical Aptitude and Resource Evaluation System.",
+  "description": "ANTARES - Assessment Network for Technical Aptitude and Resource Evaluation System",
   "author": "Julian Andres Lasso Figueroa <julian.lasso@sofka.com.co>",
   "private": true,
   "license": "UNLICENSED",
