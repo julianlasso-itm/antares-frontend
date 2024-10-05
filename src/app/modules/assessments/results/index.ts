@@ -1,4 +1,0 @@
-
-
-
-export * from './results.component';

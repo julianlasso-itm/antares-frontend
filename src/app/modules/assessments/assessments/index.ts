@@ -1,4 +1,0 @@
-
-
-
-export * from './assessments.component';

@@ -101,7 +101,7 @@
 }
 
 @media (width < 1280px) {
-  mat-card:nth-child(n+3) {
+  mat-card:nth-child(n + 3) {
     display: none;
   }
 }

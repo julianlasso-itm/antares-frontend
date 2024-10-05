@@ -1,0 +1,16 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+
+  app-table {
+    min-width: fit-content;
+    width: 50%;
+    max-width: 100%;
+  }
+}
+
+::ng-deep .custom-snack-bar {
+  padding-bottom: 30px;
+}
