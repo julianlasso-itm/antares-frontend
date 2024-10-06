@@ -2,6 +2,16 @@
   class="menu-icons"
   ngClass="{{ isMenuVisible ? 'menu-visible' : 'menu-hidden' }}"
 >
+  @for (item of menu(); track $index) {
+    <button
+      mat-icon-button
+      (click)="changeMenu(item.children)"
+      matTooltip="{{ item.title }}"
+      matTooltipPosition="after"
+    >
+      <mat-icon class="material-symbols-rounded">{{ item.icon }}</mat-icon>
+    </button>
+  }
   <button
     mat-icon-button
     (click)="menuToggle()"
@@ -10,16 +20,6 @@
   >
     <mat-icon class="material-symbols-rounded">menu_open</mat-icon>
   </button>
-  @for (item of menu(); track $index) {
-  <button
-    mat-icon-button
-    (click)="changeMenu(item.children)"
-    matTooltip="{{ item.title }}"
-    matTooltipPosition="after"
-  >
-    <mat-icon class="material-symbols-rounded">{{ item.icon }}</mat-icon>
-  </button>
-  }
 </div>
 
 <div
