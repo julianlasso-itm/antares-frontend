@@ -5,3 +5,12 @@ table {
 mat-row:hover {
   background-color: var(--mat-option-selected-state-layer-color);
 }
+
+mat-header-cell {
+  justify-content: center;
+}
+
+mat-cell[class*="mat-column-Estado"],
+mat-cell[class*="mat-column-Acciones"] {
+  justify-content: center;
+}

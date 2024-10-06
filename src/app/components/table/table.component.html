@@ -3,18 +3,41 @@
   <ng-container matColumnDef="{{ column }}">
     <mat-header-cell *matHeaderCellDef> {{ column }} </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      @if (isActionColumn(element, $index)) { @for (action of
-      getArrayActions(element, $index); track $index) {
-      <button
-        mat-icon-button
-        (click)="handleAction($event, element, action)"
-        matTooltip="{{ action.tooltip }}"
-        matTooltipPosition="above"
-      >
-        <mat-icon class="material-symbols-rounded">{{ action.icon }}</mat-icon>
-      </button>
-      } } @else {
-      {{ getElementColumn(element, $index) }}
+      @if (isActionColumn(element, $index)) {
+        @for (action of getArrayActions(element, $index); track $index) {
+          @if (
+            action.tooltip.toLowerCase() !== 'estado'
+            && action.tooltip.toLowerCase() !== 'status'
+          ) {
+            <button
+              mat-icon-button
+              (click)="handleAction($event, action)"
+              matTooltip="{{ action.tooltip }}"
+              matTooltipPosition="above"
+            >
+              <mat-icon class="material-symbols-rounded">
+                {{ action.icon }}
+              </mat-icon>
+            </button>
+          }
+        }
+      } @else {
+        @if (
+          column.toLowerCase() === 'estado' || column.toLowerCase() === 'status'
+        ) {
+          <mat-slide-toggle
+            color="primary"
+            [checked]="getElementColumn(element, $index)"
+            matTooltip="{{
+              getElementColumn(element, $index) ? 'Deshabilitar' : 'Habilitar'
+            }}"
+            matTooltipPosition="above"
+            (change)="handleStatusChange(element.actions)"
+          >
+          </mat-slide-toggle>
+        } @else {
+          {{ getElementColumn(element, $index) }}
+        }
       }
     </mat-cell>
   </ng-container>

@@ -12,6 +12,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IAction } from './action.interface';
@@ -22,10 +23,11 @@ import { Paginator } from './paginator.class';
   selector: 'app-table',
   standalone: true,
   imports: [
-    MatTableModule,
-    MatPaginatorModule,
     MatButtonModule,
     MatIconModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatTableModule,
     MatTooltipModule,
   ],
   templateUrl: './table.component.html',
@@ -73,8 +75,17 @@ export class TableComponent implements OnInit {
     this.pageEvent.emit(event);
   }
 
-  handleAction(event: Event, element: any, action: IAction) {
+  handleAction(event: Event, action: IAction) {
     event.stopPropagation();
-    action.action(element);
+    action.action();
+  }
+
+  handleStatusChange(actions: IAction[]): void {
+    const action = actions.find(
+      (action) =>
+        action.tooltip.toLowerCase() === 'estado' ||
+        action.tooltip.toLowerCase() === 'status'
+    );
+    action?.action();
   }
 }
