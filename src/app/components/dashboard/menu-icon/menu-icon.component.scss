@@ -40,14 +40,15 @@
 }
 
 .float-button {
-  position: fixed;
-  bottom: calc(50% - 20px);
-  right: 100%;
+  position: sticky;
+  right: 0;
+  top: calc(50% - 20px);
   z-index: 1000;
   background-color: var(--mat-menu-item-hover-state-layer-color);
   padding: 8px 0px 4px 0px;
   border-radius: 0 16px 16px 0;
   cursor: pointer;
+  width: fit-content;
 }
 
 .float-button:hover {
