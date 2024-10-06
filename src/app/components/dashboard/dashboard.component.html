@@ -3,12 +3,12 @@
     <mat-progress-bar mode="indeterminate" class="progress-bar"></mat-progress-bar>
   }
   <app-menu-icon class="menu-icon"></app-menu-icon>
-  <app-menu></app-menu>
+  <app-menu class="menu"></app-menu>
   <div class="main-content">
-    <app-header [logOut]="logOut.bind(this)"></app-header>
+    <app-header class="header" [logOut]="logOut.bind(this)"></app-header>
     <div class="container">
       <div class="main">
-        <div class="header">
+        <div class="title">
           <h1>{{ title() }}</h1>
           <div class="spacer"></div>
           <div class="actions">

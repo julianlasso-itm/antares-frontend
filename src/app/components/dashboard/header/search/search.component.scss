@@ -1,7 +1,7 @@
 .search-input {
   display: flex;
   flex-direction: row;
-  background-color: #f1f5f9;
+  background-color: var(--mat-select-panel-background-color);
   padding: 16px;
   border-radius: 999999999px;
   width: 650px;

@@ -2,8 +2,13 @@
 
 html,
 body {
-  height: 100%;
+  background-color: var(--mat-app-background-color);
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
