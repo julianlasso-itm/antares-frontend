@@ -20,6 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { GlobalProgressBarService } from '../../services/global-progress-bar.service';
 import { ModalStateService } from '../../services/modal-state.service';
 import { HeaderComponent } from './header/header.component';
 import { MenuIconComponent } from './menu-icon/menu-icon.component';
@@ -29,13 +31,14 @@ import { MenuComponent } from './menu/menu.component';
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
-    MatDividerModule,
-    MenuIconComponent,
-    MenuComponent,
     HeaderComponent,
     MatButtonModule,
+    MatDividerModule,
     MatIconModule,
+    MatProgressBarModule,
+    MenuComponent,
+    MenuIconComponent,
+    RouterOutlet,
   ],
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -48,6 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly modalStateService = inject(ModalStateService);
   private readonly buttonAddService = inject(ButtonAddService);
+  private readonly globalProgressBarService = inject(GlobalProgressBarService);
   public profile: Record<string, unknown>;
   public title: Signal<string>;
   private storageService: Subscription;
@@ -55,14 +59,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private buttonAddVisibleService: Subscription;
   private buttonAddActionService: Subscription;
   private modalStateVisibleService: Subscription;
+  private globalProgressBarVisibleService: Subscription;
   readonly buttonAddVisible: WritableSignal<boolean>;
   readonly buttonAddAction: WritableSignal<Function>;
+  readonly showProgressBar: WritableSignal<boolean>;
   blurEffect: WritableSignal<boolean>;
 
   constructor() {
     this.profile = {};
     this.title = signal('');
     this.blurEffect = signal(false);
+    this.showProgressBar = signal(false);
     this.storageService = new Subscription();
     this.titleService = new Subscription();
     this.buttonAddVisible = signal(false);
@@ -70,6 +77,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.buttonAddVisibleService = new Subscription();
     this.buttonAddActionService = new Subscription();
     this.modalStateVisibleService = new Subscription();
+    this.globalProgressBarVisibleService = new Subscription();
   }
 
   ngOnInit(): void {
@@ -106,6 +114,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.blurEffect.set(this.modalStateService.state);
+
+    this.globalProgressBarVisibleService =
+      this.globalProgressBarService.visible$.subscribe({
+        next: (visible: boolean) => {
+          this.showProgressBar.set(visible);
+        },
+      });
+
+    this.showProgressBar.set(this.globalProgressBarService.visible);
   }
 
   ngOnDestroy(): void {
@@ -114,6 +131,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.buttonAddVisibleService.unsubscribe();
     this.buttonAddActionService.unsubscribe();
     this.modalStateVisibleService.unsubscribe();
+    this.globalProgressBarVisibleService.unsubscribe();
   }
 
   showData(): void {

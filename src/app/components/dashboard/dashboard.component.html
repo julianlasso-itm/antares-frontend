@@ -1,4 +1,7 @@
 <div class="body {{ blurEffect() ? 'blur-effect' : '' }}">
+  @if (showProgressBar()) {
+    <mat-progress-bar mode="indeterminate" class="progress-bar"></mat-progress-bar>
+  }
   <app-menu-icon class="menu-icon"></app-menu-icon>
   <app-menu></app-menu>
   <div class="main-content">
