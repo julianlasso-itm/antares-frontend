@@ -11,10 +11,15 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MatPaginatorIntl,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PaginatorSpanishIntl } from '../../services/paginator-spanish-intl.service';
 import { IAction } from './action.interface';
 import { IDisplayedColumn } from './displayed-columns.interface';
 import { Paginator } from './paginator.class';
@@ -29,6 +34,12 @@ import { Paginator } from './paginator.class';
     MatSlideToggleModule,
     MatTableModule,
     MatTooltipModule,
+  ],
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useClass: PaginatorSpanishIntl,
+    },
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
