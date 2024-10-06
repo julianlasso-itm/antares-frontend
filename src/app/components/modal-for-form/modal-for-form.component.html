@@ -13,9 +13,14 @@
     mat-flat-button
     type="button"
     color="primary"
-    [disabled]="form().invalid"
-    (click)="data.submit(form().value)"
+    [disabled]="form().invalid || form().pristine"
+    (click)="submit()"
   >
     {{ data.action }}
   </button>
 </mat-dialog-actions>
+@if (operationBackend()) {
+  <div class="backdrop">
+    <mat-spinner></mat-spinner>
+  </div>
+}
