@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IAction } from './action.interface';
 import { IDisplayedColumn } from './displayed-columns.interface';
+import { Paginator } from './paginator.class';
 
 @Component({
   selector: 'app-table',
@@ -33,6 +34,7 @@ import { IDisplayedColumn } from './displayed-columns.interface';
 export class TableComponent implements OnInit {
   @Input() columns: Signal<IDisplayedColumn[]>;
   @Input() dataSource: WritableSignal<Object[]>;
+  @Input() paginator: WritableSignal<Paginator>;
   @Output() pageEvent: EventEmitter<PageEvent>;
 
   displayedColumns: Signal<string[]>;
@@ -41,6 +43,7 @@ export class TableComponent implements OnInit {
     this.columns = signal([]);
     this.dataSource = signal([{}]);
     this.displayedColumns = signal([]);
+    this.paginator = signal(new Paginator());
     this.pageEvent = new EventEmitter<PageEvent>();
   }
 
