@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Eliminar</h2>
+<mat-dialog-content>
+  <p>¿Está seguro de que desea eliminar el registro?</p>
+  <p>{{ name() }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="close()">Cancelar</button>
+  <button mat-flat-button type="button" color="warn" (click)="closeWithId()">
+    Eliminar
+  </button>
+</mat-dialog-actions>
