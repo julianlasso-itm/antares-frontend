@@ -1,11 +1,6 @@
-import { IAction } from '../../../components/table/action.interface';
+import { IEntity } from '../../../components/generic-crud/entity.interface';
 
-export interface IConfiguration {
+export interface IConfiguration extends IEntity {
   configurationLevelId?: string;
   name: string;
-  status: boolean;
-  actions?: IAction[];
-  createdAt?: string;
-  updatedAt?: string;
-  deletedAt?: string;
 }
