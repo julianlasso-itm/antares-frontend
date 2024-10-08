@@ -1,4 +1,9 @@
 <form class="search-input" autocomplete="off" (submit)="(false)">
   <mat-icon class="material-symbols-rounded">search</mat-icon>
-  <input type="text" placeholder="Buscar un sofkiano" />
+  <input
+    #searchInput
+    type="text"
+    [placeholder]="placeholder()"
+    (input)="onSearch(searchInput.value)"
+  />
 </form>
