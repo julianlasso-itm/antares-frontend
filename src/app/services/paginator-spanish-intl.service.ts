@@ -16,6 +16,8 @@ export class PaginatorSpanishIntl implements MatPaginatorIntl {
       return $localize`Página 1 de 1`;
     }
     const amountPages = Math.ceil(length / pageSize);
-    return $localize`Página ${page + 1} de ${amountPages}`;
+    return $localize`Página ${
+      page + 1
+    } de ${amountPages} - Total: ${length} registro${length > 1 ? 's' : ''}`;
   }
 }
