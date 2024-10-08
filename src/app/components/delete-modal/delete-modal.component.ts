@@ -5,8 +5,8 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { IDeleteModalData } from './delete-modal-data.interface';
 import { ModalStateService } from '../../services/modal-state.service';
+import { IDeleteModalData } from './delete-modal-data.interface';
 
 @Component({
   selector: 'app-delete-modal',
@@ -32,7 +32,7 @@ export class DeleteModalComponent {
   }
 
   closeWithId(): void {
-    this._dialogRef.close(this.id());
+    this._dialogRef.close({ id: this.id(), name: this.name() });
     this._modalStateService.state = false;
   }
 }
