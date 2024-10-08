@@ -1,12 +1,11 @@
+import { IAction } from '../../../components/table/action.interface';
+
 export interface IConfiguration {
-  id: string;
+  configurationLevelId?: string;
   name: string;
   status: boolean;
   actions?: IAction[];
-}
-
-export interface IAction {
-  tooltip: string;
-  icon: string;
-  action: Function;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
 }

@@ -5,6 +5,7 @@
 } @else {
 <div class="content">
   <app-table
+    [paginator]="paginator"
     [dataSource]="dataSource"
     [columns]="displayedColumns"
     (pageEvent)="pageEvent($event)"
