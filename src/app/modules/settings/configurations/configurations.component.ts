@@ -41,13 +41,13 @@ export class ConfigurationsComponent {
     { name: 'Acciones', field: 'actions' },
   ]);
   private _searchBarSubscription: Subscription;
-  private readonly _buttonAddService = inject(ButtonAddService);
+  private readonly _buttonAdd$ = inject(ButtonAddService);
   private readonly _dialog = inject(MatDialog);
-  private readonly _globalProgressBarService = inject(GlobalProgressBarService);
-  private readonly _httpService = inject(HttpService);
+  private readonly _globalProgressBar$ = inject(GlobalProgressBarService);
+  private readonly _http$ = inject(HttpService);
   private readonly _numberOfSearches: WritableSignal<number>;
-  private readonly _operationBackendService = inject(OperationBackendService);
-  private readonly _searchBarService = inject(SearchBarService);
+  private readonly _operationBackend$ = inject(OperationBackendService);
+  private readonly _searchBar$ = inject(SearchBarService);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _urlCustomers = '/assessments/configuration-levels';
   readonly loading: WritableSignal<boolean>;
@@ -62,12 +62,11 @@ export class ConfigurationsComponent {
   }
 
   ngOnInit(): void {
-    this._buttonAddService.visible = true;
-    this._buttonAddService.action =
-      this.OpenModalForCreateConfiguration.bind(this);
+    this._buttonAdd$.visible = true;
+    this._buttonAdd$.action = this.OpenModalForCreateConfiguration.bind(this);
     this.getDataSource();
-    this._searchBarService.placeholder = 'Buscar una configuración';
-    this._searchBarSubscription = this._searchBarService.search$.subscribe({
+    this._searchBar$.placeholder = 'Buscar una configuración';
+    this._searchBarSubscription = this._searchBar$.search$.subscribe({
       next: (search) => this.onSearch(search),
     });
   }
@@ -103,7 +102,7 @@ export class ConfigurationsComponent {
         .set('size', this.paginator().pageSize.toString())
         .set('search', search);
 
-      this._httpService
+      this._http$
         .get<IResponse<IFindAllResponse<IConfiguration>>>(
           this._urlCustomers,
           params
@@ -120,15 +119,8 @@ export class ConfigurationsComponent {
             this.dataSource.set(response.value.data);
           },
           error: (error) => {
-            this._snackBar.open(
-              'Error al cargar los datos de las configuraciones',
-              'Cerrar',
-              {
-                duration: 10000,
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                panelClass: 'custom-snack-bar',
-              }
+            this.showSnackBar(
+              'Error al cargar los datos de las configuraciones'
             );
             console.error(error);
             this.loading.set(false);
@@ -177,7 +169,7 @@ export class ConfigurationsComponent {
     const params = new HttpParams()
       .set('page', this.paginator().pageIndex.toString())
       .set('size', this.paginator().pageSize.toString());
-    this._httpService
+    this._http$
       .get<IResponse<IFindAllResponse<IConfiguration>>>(
         this._urlCustomers,
         params
@@ -194,16 +186,7 @@ export class ConfigurationsComponent {
           this.dataSource.set(response.value.data);
         },
         error: (error) => {
-          this._snackBar.open(
-            'Error al cargar los datos de las configuraciones',
-            'Cerrar',
-            {
-              duration: 10000,
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              panelClass: 'custom-snack-bar',
-            }
-          );
+          this.showSnackBar('Error al cargar los datos de las configuraciones');
           console.error(error);
           this.loading.set(false);
         },
@@ -271,8 +254,6 @@ export class ConfigurationsComponent {
    * @param configuration - Registro de configuración a editar
    */
   OpenModalForEditConfiguration(configuration: IConfiguration): void {
-    // const updateConfiguration = { ...configuration };
-    // delete updateConfiguration.actions;
     this._dialog.open(
       ModalForFormComponent,
       this.generateModalInfo(signal(configuration), TypeForm.UPDATE)
@@ -291,45 +272,24 @@ export class ConfigurationsComponent {
 
     dialogRef.afterClosed().subscribe((id) => {
       if (id) {
-        this._globalProgressBarService.visible = true;
-        this._snackBar.open('Eliminando la configuración', 'Cerrar', {
-          duration: 10000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-          panelClass: 'custom-snack-bar',
-        });
-        this._httpService
+        this._globalProgressBar$.visible = true;
+        this.showSnackBar('Eliminando la configuración');
+        this._http$
           .delete<IResponse<IConfiguration>>(`${this._urlCustomers}/${id}`)
           .subscribe({
             next: () => {
-              this._snackBar.open(
-                `Se ha eliminado la configuración "${configuration.name}"`,
-                'Cerrar',
-                {
-                  duration: 10000,
-                  horizontalPosition: 'center',
-                  verticalPosition: 'bottom',
-                  panelClass: 'custom-snack-bar',
-                }
+              this.showSnackBar(
+                `Se ha eliminado la configuración "${configuration.name}"`
               );
               this.getDataSource();
             },
             error: (error) => {
-              this._globalProgressBarService.visible = false;
-              this._snackBar.open(
-                'Error al eliminar la configuración',
-                'Cerrar',
-                {
-                  duration: 10000,
-                  horizontalPosition: 'center',
-                  verticalPosition: 'bottom',
-                  panelClass: 'custom-snack-bar',
-                }
-              );
+              this._globalProgressBar$.visible = false;
+              this.showSnackBar('Error al eliminar la configuración');
               console.error(error);
             },
             complete: () => {
-              this._globalProgressBarService.visible = false;
+              this._globalProgressBar$.visible = false;
             },
           });
       }
@@ -348,44 +308,32 @@ export class ConfigurationsComponent {
     delete data.updatedAt;
     delete data.deletedAt;
     delete data.configurationLevelId;
-    this._globalProgressBarService.visible = true;
+    this._globalProgressBar$.visible = true;
     this._snackBar.open('Actualizando el estado', 'Cerrar', {
       duration: 10000,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       panelClass: 'custom-snack-bar',
     });
-    this._httpService
+    this._http$
       .put<IConfiguration, IResponse<IConfiguration>>(
         `${this._urlCustomers}/${id}`,
         data
       )
       .subscribe({
         next: (response) => {
-          this._snackBar.open(
-            `Se ha actualizado el estado de "${response.value.name}"`,
-            'Cerrar',
-            {
-              duration: 10000,
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              panelClass: 'custom-snack-bar',
-            }
+          this.showSnackBar(
+            `Se ha actualizado el estado de "${response.value.name}"`
           );
           this.getDataSource();
         },
         error: (error) => {
-          this._globalProgressBarService.visible = false;
-          this._snackBar.open('Error al actualizar el estado', 'Cerrar', {
-            duration: 10000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            panelClass: 'custom-snack-bar',
-          });
+          this._globalProgressBar$.visible = false;
+          this.showSnackBar('Error al actualizar el estado');
           console.error(error);
         },
         complete: () => {
-          this._globalProgressBarService.visible = false;
+          this._globalProgressBar$.visible = false;
         },
       });
   }
@@ -403,30 +351,20 @@ export class ConfigurationsComponent {
       form.disable();
       return form;
     });
-    this._operationBackendService.visible = true;
-    this._httpService
+    this._operationBackend$.visible = true;
+    this._http$
       .post<IConfiguration, IResponse<IConfiguration>>(
         this._urlCustomers,
         config
       )
       .subscribe({
         next: (response) => {
-          this._snackBar.open('Se ha registrado la configuración', 'Cerrar', {
-            duration: 10000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            panelClass: 'custom-snack-bar',
-          });
+          this.showSnackBar('Se ha registrado la configuración');
           closeForm();
           this.getDataSource();
         },
         error: (error) => {
-          this._snackBar.open('Error al registrar la configuración', 'Cerrar', {
-            duration: 10000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            panelClass: 'custom-snack-bar',
-          });
+          this.showSnackBar('Error al registrar la configuración');
           console.error(error);
           form.update((form) => {
             form.enable();
@@ -439,7 +377,7 @@ export class ConfigurationsComponent {
             form.reset();
             return form;
           });
-          this._operationBackendService.visible = false;
+          this._operationBackend$.visible = false;
         },
       });
   }
@@ -457,37 +395,21 @@ export class ConfigurationsComponent {
   ): void {
     const id = config.configurationLevelId;
     delete config.configurationLevelId;
-    this._httpService
+    this._http$
       .put<IConfiguration, IResponse<IConfiguration>>(
         `${this._urlCustomers}/${id}`,
         config
       )
       .subscribe({
         next: (response) => {
-          this._snackBar.open(
-            `Se ha actualizado la configuración "${response.value.name}"`,
-            'Cerrar',
-            {
-              duration: 10000,
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              panelClass: 'custom-snack-bar',
-            }
+          this.showSnackBar(
+            `Se ha actualizado la configuración "${response.value.name}"`
           );
           closeForm();
           this.getDataSource();
         },
         error: (error) => {
-          this._snackBar.open(
-            'Error al actualizar la configuración',
-            'Cerrar',
-            {
-              duration: 10000,
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              panelClass: 'custom-snack-bar',
-            }
-          );
+          this.showSnackBar('Error al actualizar la configuración');
           console.error(error);
           form.update((form) => {
             form.enable();
@@ -500,7 +422,7 @@ export class ConfigurationsComponent {
             form.reset();
             return form;
           });
-          this._operationBackendService.visible = false;
+          this._operationBackend$.visible = false;
         },
       });
   }
@@ -509,21 +431,8 @@ export class ConfigurationsComponent {
    * Método para obtener la configuración de los campos del formulario
    * @returns Configuración de los campos del formulario
    */
-  private getFieldsInfo(
-    withId: boolean = false
-  ): WritableSignal<Array<FormField>> {
-    const id = {
-      field: 'configurationLevelId',
-      type: TypeInput.HIDDEN,
-      formControl: signal(
-        new FormControl(null, {
-          nonNullable: true,
-          validators: [Validators.required],
-        })
-      ),
-    };
-    return signal([
-      ...(withId ? [id] : []),
+  private getFieldsInfo(withId: boolean = false): WritableSignal<FormField[]> {
+    const fields: FormField[] = [
       {
         field: 'name',
         label: 'Nombre',
@@ -548,6 +457,30 @@ export class ConfigurationsComponent {
           },
         ],
       },
-    ]);
+    ];
+
+    if (withId) {
+      fields.unshift({
+        field: 'configurationLevelId',
+        type: TypeInput.HIDDEN,
+        formControl: signal(
+          new FormControl(null, {
+            nonNullable: true,
+            validators: [Validators.required],
+          })
+        ),
+      });
+    }
+
+    return signal(fields);
+  }
+
+  private showSnackBar(message: string): void {
+    this._snackBar.open(message, 'Cerrar', {
+      duration: 10000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: 'custom-snack-bar',
+    });
   }
 }
