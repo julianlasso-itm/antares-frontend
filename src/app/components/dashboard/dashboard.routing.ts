@@ -17,5 +17,14 @@ menuStruct.forEach((menu) => {
   });
 });
 
+routesDashboard.push({
+  path: 'settings/levels/:configurationLevelId',
+  title: 'Niveles',
+  loadComponent: () =>
+    import('../../modules/settings/levels/levels.component').then(
+      (component) => component.LevelsComponent
+    ),
+});
+
 routesDashboard.push({ path: '', redirectTo: 'dashboard', pathMatch: 'full' });
 routesDashboard.push({ path: '**', redirectTo: 'dashboard' });
