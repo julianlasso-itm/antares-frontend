@@ -1,24 +1,28 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 import { GenericCrudComponent } from '../../../components/generic-crud/generic-crud.component';
 import {
   FormField,
   TypeError,
   TypeInput,
 } from '../../../components/modal-for-form/modal-for-form.interface';
+import { IAction } from '../../../components/table/action.interface';
 import { TableComponent } from '../../../components/table/table.component';
 import { IConfiguration } from './configuration.interface';
 
 @Component({
   selector: 'app-configurations',
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatSnackBarModule, TableComponent],
+  imports: [MatProgressSpinnerModule, TableComponent],
   templateUrl: './configurations.component.html',
   styleUrl: './configurations.component.scss',
 })
 export class ConfigurationsComponent extends GenericCrudComponent<IConfiguration> {
+  private readonly _router = inject(Router);
+
   constructor() {
     super();
     this.displayedColumns.set([
@@ -26,7 +30,8 @@ export class ConfigurationsComponent extends GenericCrudComponent<IConfiguration
       { name: 'Estado', field: 'status' },
       { name: 'Acciones', field: 'actions' },
     ]);
-    this._urlBackend = '/assessments/configuration-levels';
+    this._urlBackend = environment.endpoint.assessments.configurations;
+    this._searchBar$.placeholder = 'Buscar una configuración';
     this._errorMessageLoad = 'Error al cargar los datos de las configuraciones';
     this._titleForModal = {
       create: 'Registrar configuración',
@@ -90,5 +95,17 @@ export class ConfigurationsComponent extends GenericCrudComponent<IConfiguration
     }
 
     return signal(fields);
+  }
+
+  protected override getActions(entity: IConfiguration): IAction[] {
+    const actions = super.getActions(entity);
+    actions.push({
+      icon: 'altitude',
+      tooltip: 'Niveles',
+      action: () => {
+        this._router.navigate(['settings/levels', entity.configurationLevelId]);
+      },
+    });
+    return actions;
   }
 }
