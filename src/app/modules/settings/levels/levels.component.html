@@ -1,1 +1,14 @@
-<p>levels works!</p>
+@if (loading()) {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+  } @else {
+  <div class="content">
+    <app-table
+      [paginator]="paginator"
+      [dataSource]="dataSource"
+      [columns]="displayedColumns"
+      (pageEvent)="pageEvent($event)"
+    ></app-table>
+  </div>
+  }
