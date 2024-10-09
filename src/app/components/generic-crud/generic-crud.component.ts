@@ -9,6 +9,7 @@ import { IFindAllResponse, IResponse } from '../../modules/response.interface';
 import { ButtonAddService } from '../../services/button-add.service';
 import { GlobalProgressBarService } from '../../services/global-progress-bar.service';
 import { HttpService } from '../../services/http.service';
+import { MenuService } from '../../services/menu.service';
 import { OperationBackendService } from '../../services/operation-backend.service';
 import { SearchBarService } from '../../services/search-bar.service';
 import { DeleteModalComponent } from '../delete-modal/delete-modal.component';
@@ -19,9 +20,9 @@ import {
   TypeForm,
 } from '../modal-for-form/modal-for-form.interface';
 import { IAction } from '../table/action.interface';
+import { IDisplayedColumn } from '../table/displayed-columns.interface';
 import { Paginator } from '../table/paginator.class';
 import { IEntity } from './entity.interface';
-import { IDisplayedColumn } from '../table/displayed-columns.interface';
 
 @Component({
   selector: 'app-generic-crud',
@@ -39,6 +40,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
   protected readonly _operationBackend$ = inject(OperationBackendService);
   protected readonly _searchBar$ = inject(SearchBarService);
   protected readonly _snackBar = inject(MatSnackBar);
+  protected readonly _menuService = inject(MenuService);
   protected _urlBackend: string;
   protected _errorMessageLoad: string;
   protected _titleForModal: { create: string; update: string; delete: string };
@@ -52,6 +54,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
   protected _createErrorMessage: string;
   protected _updateSuccessMessage: string;
   protected _updateErrorMessage: string;
+  protected readonly _filter: WritableSignal<string>;
   readonly dataSource: WritableSignal<Entity[]>;
   readonly displayedColumns: WritableSignal<Array<IDisplayedColumn>>;
   readonly loading: WritableSignal<boolean>;
@@ -65,6 +68,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
     this._numberOfSearches = signal(0);
     this.displayedColumns = signal([]);
     this._urlBackend = '';
+    this._searchBar$.placeholder = '';
     this._errorMessageLoad = '';
     this._titleForModal = {
       create: '',
@@ -81,13 +85,13 @@ export class GenericCrudComponent<Entity extends IEntity> {
     this._createErrorMessage = '';
     this._updateSuccessMessage = '';
     this._updateErrorMessage = '';
+    this._filter = signal('');
   }
 
   ngOnInit(): void {
     this._buttonAdd$.visible = true;
     this._buttonAdd$.action = this.OpenModalForCreate.bind(this);
     this.getDataSource();
-    this._searchBar$.placeholder = 'Buscar una configuración';
     this._searchBarSubscription = this._searchBar$.search$.subscribe({
       next: (search) => this.onSearch(search),
     });
@@ -95,6 +99,8 @@ export class GenericCrudComponent<Entity extends IEntity> {
 
   ngOnDestroy(): void {
     this._searchBarSubscription.unsubscribe();
+    this._searchBar$.clear = true;
+    this._searchBar$.search = '';
   }
 
   pageEvent(event: PageEvent) {
@@ -111,10 +117,13 @@ export class GenericCrudComponent<Entity extends IEntity> {
       this.getDataSource();
     } else if (search.length > 0) {
       this.loading.set(true);
-      const params = new HttpParams()
+      let params = new HttpParams()
         .set('page', '0')
         .set('size', this.paginator().pageSize.toString())
         .set('search', search);
+      if (this._filter() !== '') {
+        params = params.set('filter', this._filter());
+      }
 
       this._http$
         .get<IResponse<IFindAllResponse<Entity>>>(this._urlBackend, params)
@@ -169,9 +178,12 @@ export class GenericCrudComponent<Entity extends IEntity> {
 
   protected getDataSource(): void {
     this.loading.set(true);
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('page', this.paginator().pageIndex.toString())
       .set('size', this.paginator().pageSize.toString());
+    if (this._filter() !== '') {
+      params = params.set('filter', this._filter());
+    }
     this._http$
       .get<IResponse<IFindAllResponse<Entity>>>(this._urlBackend, params)
       .subscribe({
@@ -317,8 +329,12 @@ export class GenericCrudComponent<Entity extends IEntity> {
       return form;
     });
     this._operationBackend$.visible = true;
+    let params = new HttpParams();
+    if (this._filter() !== '') {
+      params = params.set('filter', this._filter());
+    }
     this._http$
-      .post<Entity, IResponse<Entity>>(this._urlBackend, config)
+      .post<Entity, IResponse<Entity>>(this._urlBackend, config, params)
       .subscribe({
         next: (response) => {
           this.showSnackBar(this._createSuccessMessage);
@@ -384,7 +400,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
     return signal([]);
   }
 
-  private showSnackBar(message: string): void {
+  protected showSnackBar(message: string): void {
     this._snackBar.open(message, 'Cerrar', {
       duration: 10000,
       horizontalPosition: 'center',
