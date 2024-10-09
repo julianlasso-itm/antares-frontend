@@ -8,6 +8,7 @@ export class SearchBarService {
   private _placeholder: string;
   private _search: string;
   private readonly _search$ = new BehaviorSubject<string>('');
+  private readonly _clear$ = new BehaviorSubject<boolean>(false);
   private readonly _placeholder$ = new BehaviorSubject<string>('');
 
   constructor() {
@@ -17,6 +18,10 @@ export class SearchBarService {
 
   get search$(): Observable<string> {
     return this._search$.asObservable();
+  }
+
+  get clear$(): Observable<boolean> {
+    return this._clear$.asObservable();
   }
 
   get placeholder$(): Observable<string> {
@@ -36,6 +41,10 @@ export class SearchBarService {
       this._placeholder = placeholder;
       this._placeholder$.next(placeholder);
     }
+  }
+
+  set clear(clear: boolean) {
+    this._clear$.next(clear);
   }
 
   set search(search: string) {

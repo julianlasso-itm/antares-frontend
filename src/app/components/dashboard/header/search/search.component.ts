@@ -39,6 +39,7 @@ export class SearchComponent {
 
   ngOnDestroy(): void {
     this._searchSubscription.unsubscribe();
+    this._clearSubscription.unsubscribe();
   }
 
   onSearch(search: string): void {
