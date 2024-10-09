@@ -57,4 +57,9 @@ export enum TypeInput {
   SELECT = 'select',
   SLIDE_TOGGLE = 'slide-toggle',
   CHECKBOX = 'checkbox',
+  TEXTAREA = 'textarea',
+  PASSWORD = 'password',
+  NUMBER = 'number',
+  DATE = 'date',
+  TIME = 'time',
 }
