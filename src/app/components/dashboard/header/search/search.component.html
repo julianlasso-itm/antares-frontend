@@ -1,9 +1,27 @@
-<form class="search-input" autocomplete="off" (submit)="(false)">
-  <mat-icon class="material-symbols-rounded">search</mat-icon>
+<form
+  class="search-input"
+  ngClass="{{ disabled() ? 'disabled' : '' }}"
+  autocomplete="off"
+  (submit)="(false)"
+>
+  <div class="search-icon">
+    <mat-icon class="material-symbols-rounded">search</mat-icon>
+  </div>
   <input
     #searchInput
     type="text"
     [placeholder]="placeholder()"
     (input)="onSearch(searchInput.value)"
+    [disabled]="disabled()"
+    (keydown)="onKeyDown($event)"
   />
+  <div
+    matRipple
+    class="close-button"
+    ngClass="{{ searchInput.value.length > 0 ? 'disabled-close' : '' }}"
+    (click)="clearSearch()"
+    (keydown)="onKeyDown($event)"
+  >
+    <mat-icon class="material-symbols-rounded">close</mat-icon>
+  </div>
 </form>

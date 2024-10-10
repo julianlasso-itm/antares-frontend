@@ -61,6 +61,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
   readonly paginator: WritableSignal<Paginator>;
 
   constructor() {
+    this._searchBar$.disabled = false;
     this.paginator = signal(new Paginator());
     this.loading = signal(false);
     this.dataSource = signal([]);
