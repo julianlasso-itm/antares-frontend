@@ -1,5 +1,6 @@
 import { WritableSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ISelectData } from '../form/select-data.interface';
 
 export interface IModalForForm<TData> {
   title: string;
@@ -21,12 +22,12 @@ export interface FormField {
   label?: string;
   type: TypeInput;
   placeholder?: string;
-  errors?: Array<IError>;
+  errors?: IError[];
   icon?: string;
   formControl: WritableSignal<FormControl>;
-  loadOptions?: WritableSignal<Array<object>>;
+  loadOptions?: Promise<WritableSignal<ISelectData[]>>;
   selectionChange?: (...args: any) => void;
-  options?: Array<any>;
+  options?: any[];
   defaultValue?: any;
 }
 

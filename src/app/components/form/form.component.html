@@ -10,10 +10,12 @@
             formControlName="{{ field.field }}"
             (selectionChange)="field?.selectionChange($event.value, this.form)"
           >
-          @for (option of field.loadOptions ? field.loadOptions() : []; track $index) {
-            <mat-option [value]="getOptionValue(option)">
-              {{ getOptionLabel(option) }}
-            </mat-option>
+          @if (field.loadOptions && (field.loadOptions | async); as options) {
+            @for (option of options(); track $index) {
+              <mat-option [value]="getOptionValue(option)">
+                {{ getOptionLabel(option) }}
+              </mat-option>
+            }
           }
           </mat-select>
           <mat-icon class="material-symbols-rounded" matSuffix>{{ field.icon }}</mat-icon>
