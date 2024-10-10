@@ -37,6 +37,15 @@ export const menuStruct: MenuStruct[] = [
       },
       // {},
       {
+        title: 'Profesionales',
+        path: 'human-resources/professionals',
+        icon: 'groups',
+        loadComponent: () =>
+          import(
+            './modules/human-resources/professionals/professionals.component'
+          ).then((component) => component.ProfessionalsComponent),
+      },
+      {
         title: 'Evaluaciones',
         path: 'assessments',
         icon: 'assignment',
@@ -47,12 +56,21 @@ export const menuStruct: MenuStruct[] = [
       },
       {
         title: 'Brechas de conocimiento',
-        path: 'knowledge-gaps',
+        path: 'knowledge-gaps/gaps',
         icon: 'network_intelligence_update',
         loadComponent: () =>
           import(
             './modules/knowledge-gaps/knowledge-gaps/knowledge-gaps.component'
           ).then((component) => component.KnowledgeGapsComponent),
+      },
+      {
+        title: 'Seguimiento de brechas',
+        path: 'knowledge-gaps/notes',
+        icon: 'network_intelligence_update',
+        loadComponent: () =>
+          import(
+            './modules/knowledge-gaps/knowledge-gap-notes/knowledge-gap-notes.component'
+          ).then((component) => component.KnowledgeGapNotesComponent),
       },
     ],
   },
@@ -106,6 +124,15 @@ export const menuStruct: MenuStruct[] = [
             './modules/projects-management/technology-stack/technology-stack.component'
           ).then((component) => component.TechnologyStackComponent),
       },
+      {
+        title: 'Stack tecnológico por rol',
+        path: 'projects/technology-per-role',
+        icon: 'settings',
+        loadComponent: () =>
+          import(
+            './modules/projects-management/technology-per-role/technology-per-role.component'
+          ).then((component) => component.TechnologyPerRoleComponent),
+      },
     ],
   },
   {
@@ -132,13 +159,31 @@ export const menuStruct: MenuStruct[] = [
           ).then((component) => component.TechnologyItemsComponent),
       },
       {
-        title: 'Dominios de Conocimiento',
+        title: 'Dominios de conocimiento',
         path: 'technologies/domains',
         icon: 'domain_verification',
         loadComponent: () =>
           import(
             './modules/domain-knowledge/domain-knowledge/domain-knowledge.component'
           ).then((component) => component.DomainKnowledgeComponent),
+      },
+      {
+        title: 'Dom. de con. por nivel',
+        path: 'technologies/domain-knowledge-levels',
+        icon: 'domain_verification',
+        loadComponent: () =>
+          import(
+            './modules/domain-knowledge/domain-knowledge-levels/domain-knowledge-levels.component'
+          ).then((component) => component.DomainKnowledgeLevelsComponent),
+      },
+      {
+        title: 'Preguntas y respuestas',
+        path: 'technologies/domain-questions-answers',
+        icon: 'domain_verification',
+        loadComponent: () =>
+          import(
+            './modules/domain-knowledge/domain-questions-answers/domain-questions-answers.component'
+          ).then((component) => component.DomainQuestionsAnswersComponent),
       },
     ],
   },
@@ -161,6 +206,33 @@ export const menuStruct: MenuStruct[] = [
           import(
             './modules/settings/configurations/configurations.component'
           ).then((component) => component.ConfigurationsComponent),
+      },
+      {
+        title: 'Niveles',
+        path: 'settings/levels',
+        icon: 'altitude',
+        loadComponent: () =>
+          import('./modules/settings/levels/levels.component').then(
+            (component) => component.LevelsComponent
+          ),
+      },
+      {
+        title: 'Nivel por configuración',
+        path: 'settings/configuration-per-level',
+        icon: 'altitude',
+        loadComponent: () =>
+          import(
+            './modules/settings/configuration-per-level/configuration-per-level.component'
+          ).then((component) => component.ConfigurationPerLevelComponent),
+      },
+      {
+        title: 'Escala de calificación',
+        path: 'settings/rating-scale',
+        icon: 'scale',
+        loadComponent: () =>
+          import('./modules/settings/rating-scale/rating-scale.component').then(
+            (component) => component.RatingScaleComponent
+          ),
       },
       {
         title: 'Usuarios',
