@@ -8,6 +8,7 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { OAuthStorage, provideOAuthClient } from 'angular-oauth2-oidc';
+import { provideToastr } from 'ngx-toastr';
 
 import { routes } from './app.routes';
 
@@ -26,6 +27,10 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, inMemoryScrollingFeature),
     provideAnimationsAsync(),
+    provideToastr({
+      maxOpened:4,
+      preventDuplicates: true,
+    }),
     provideHttpClient(),
     provideOAuthClient(),
     {

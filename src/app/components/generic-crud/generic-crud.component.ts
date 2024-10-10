@@ -3,7 +3,7 @@ import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { IFindAllResponse, IResponse } from '../../modules/response.interface';
 import { ButtonAddService } from '../../services/button-add.service';
@@ -39,7 +39,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
   protected readonly _numberOfSearches: WritableSignal<number>;
   protected readonly _operationBackend$ = inject(OperationBackendService);
   protected readonly _searchBar$ = inject(SearchBarService);
-  protected readonly _snackBar = inject(MatSnackBar);
+  protected readonly _notification = inject(ToastrService);
   protected readonly _menuService = inject(MenuService);
   protected _urlBackend: string;
   protected _errorMessageLoad: string;
@@ -139,7 +139,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
             this.dataSource.set(response.value.data);
           },
           error: (error) => {
-            this.showSnackBar(this._errorMessageLoad);
+            this.showSnackBar(this._errorMessageLoad, 'error');
             console.error(error);
             this.loading.set(false);
           },
@@ -198,7 +198,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
           this.dataSource.set(response.value.data);
         },
         error: (error) => {
-          this.showSnackBar(this._errorMessageLoad);
+          this.showSnackBar(this._errorMessageLoad, 'error');
           console.error(error);
           this.loading.set(false);
         },
@@ -268,19 +268,20 @@ export class GenericCrudComponent<Entity extends IEntity> {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this._globalProgressBar$.visible = true;
-        this.showSnackBar(this._deletingInProgressMessage);
+        this.showSnackBar(this._deletingInProgressMessage, 'info');
         this._http$
           .delete<IResponse<Entity>>(`${this._urlBackend}/${result.id}`)
           .subscribe({
             next: () => {
               this.showSnackBar(
-                `${this._deleteSuccessMessage} "${result.name}"`
+                `${this._deleteSuccessMessage} "${result.name}"`,
+                'success'
               );
               this.getDataSource();
             },
             error: (error) => {
               this._globalProgressBar$.visible = false;
-              this.showSnackBar(this._deleteErrorMessage);
+              this.showSnackBar(this._deleteErrorMessage, 'error');
               console.error(error);
             },
             complete: () => {
@@ -300,17 +301,17 @@ export class GenericCrudComponent<Entity extends IEntity> {
     delete data.deletedAt;
     delete (data as any)[Object.keys(data)[0]];
     this._globalProgressBar$.visible = true;
-    this.showSnackBar(this._updatingStatusMessage);
+    this.showSnackBar(this._updatingStatusMessage, 'info');
     this._http$
       .put<Entity, IResponse<Entity>>(`${this._urlBackend}/${id}`, data)
       .subscribe({
         next: (response) => {
-          this.showSnackBar(this._updatingStatusSuccessMessage);
+          this.showSnackBar(this._updatingStatusSuccessMessage, 'success');
           this.getDataSource();
         },
         error: (error) => {
           this._globalProgressBar$.visible = false;
-          this.showSnackBar(this._updatingStatusErrorMessage);
+          this.showSnackBar(this._updatingStatusErrorMessage, 'error');
           console.error(error);
         },
         complete: () => {
@@ -337,17 +338,18 @@ export class GenericCrudComponent<Entity extends IEntity> {
       .post<Entity, IResponse<Entity>>(this._urlBackend, config, params)
       .subscribe({
         next: (response) => {
-          this.showSnackBar(this._createSuccessMessage);
+          this.showSnackBar(this._createSuccessMessage, 'success');
           closeForm();
           this.getDataSource();
         },
         error: (error) => {
-          this.showSnackBar(this._createErrorMessage);
+          this.showSnackBar(this._createErrorMessage, 'error');
           console.error(error);
           form.update((form) => {
             form.enable();
             return form;
           });
+          this._operationBackend$.visible = false;
         },
         complete: () => {
           form.update((form) => {
@@ -371,12 +373,12 @@ export class GenericCrudComponent<Entity extends IEntity> {
       .put<Entity, IResponse<Entity>>(`${this._urlBackend}/${id}`, data)
       .subscribe({
         next: (response) => {
-          this.showSnackBar(this._updateSuccessMessage);
+          this.showSnackBar(this._updateSuccessMessage, 'success');
           closeForm();
           this.getDataSource();
         },
         error: (error) => {
-          this.showSnackBar(this._updateErrorMessage);
+          this.showSnackBar(this._updateErrorMessage, 'error');
           console.error(error);
           form.update((form) => {
             form.enable();
@@ -400,12 +402,69 @@ export class GenericCrudComponent<Entity extends IEntity> {
     return signal([]);
   }
 
-  protected showSnackBar(message: string): void {
-    this._snackBar.open(message, 'Cerrar', {
-      duration: 10000,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      panelClass: 'custom-snack-bar',
-    });
+  protected showSnackBar(
+    message: string,
+    type: 'success' | 'error' | 'info' | 'warning'
+  ): void {
+    const config: Partial<IndividualConfig> = {
+      closeButton: true,
+      progressBar: true,
+      positionClass: 'toast-bottom-right',
+      timeOut: 10000,
+    };
+    if (type === 'success') {
+      this._notification.success(message, this.getRandomMessage(), config);
+    } else if (type === 'error') {
+      this._notification.error(message, this.getRandomErrorMessage(), config);
+    } else if (type === 'info') {
+      this._notification.info(message, undefined, { ...config, timeOut: 2000 });
+    } else if (type === 'warning') {
+      this._notification.warning(message, undefined, config);
+    }
+  }
+
+  private readonly successMessages: string[] = [
+    'Excelente trabajo',
+    '¡Bien hecho!',
+    'Lo lograste, felicidades',
+    'Sigue así, vas genial',
+    '¡Eres increíble!',
+    'Buen progreso',
+    'Estás logrando grandes cosas',
+    'Superaste mis expectativas',
+    'Increíble esfuerzo',
+    'Gran avance',
+    '¡Lo hiciste perfectamente!',
+    'Tu esfuerzo da frutos',
+    'Muy buen resultado',
+    'Sigue destacándote',
+    '¡Eso es tener éxito!',
+    'Impresionante dedicación',
+    'Tu talento brilla',
+    'Vas por muy buen camino',
+    'Orgulloso de tu logro',
+    'Tu compromiso es admirable',
+  ];
+
+  private readonly errorMessages: string[] = [
+    '¡Vaya, no te has podido!',
+    'Error inesperado',
+    'Algo ha ido mal',
+    'Operación fallida',
+    'Algo ha salido mal',
+    'Operación cancelada',
+    'Houston, we have a problem',
+  ];
+
+  private getRandomMessage(): string {
+    return this.successMessages[
+      Math.floor(Math.random() * this.successMessages.length)
+    ];
+  }
+
+  private getRandomErrorMessage(): string {
+    return this.errorMessages[
+      Math.floor(Math.random() * this.errorMessages.length)
+    ];
   }
 }
