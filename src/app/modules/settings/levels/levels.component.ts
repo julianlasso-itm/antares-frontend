@@ -98,7 +98,7 @@ export class LevelsComponent extends GenericCrudComponent<ILevel> {
         label: 'Peso',
         type: TypeInput.NUMBER,
         placeholder: 'Importancia del nivel. Máximo 1.00 mínimo 0.00',
-        icon: 'scale',
+        icon: 'weight',
         formControl: signal(
           new FormControl(null, {
             nonNullable: true,
@@ -153,7 +153,10 @@ export class LevelsComponent extends GenericCrudComponent<ILevel> {
           this._menuService.title = `Niveles de la configuración "${response.value.name}"`;
         },
         error: (error) => {
-          this.showSnackBar('Error al obtener el nombre de la configuración');
+          this.showSnackBar(
+            'Error al obtener el nombre de la configuración',
+            'error'
+          );
           console.error(error);
         },
         complete: () => {},
