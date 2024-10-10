@@ -75,6 +75,13 @@ export class TableComponent implements OnInit {
   }
 
   getElementColumn(element: any, index: number): string {
+    if (this.columns()[index].field.includes('.')) {
+      const fields = this.columns()[index].field.split('.');
+      for (const field of fields) {
+        element = element[field];
+      }
+      return element;
+    }
     return element[this.columns()[index].field];
   }
 

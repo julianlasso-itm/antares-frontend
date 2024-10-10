@@ -11,6 +11,14 @@ mat-header-cell {
 }
 
 mat-cell[class*="mat-column-Estado"],
-mat-cell[class*="mat-column-Acciones"] {
+mat-cell[class*="mat-column-Acciones"],
+mat-cell[class*="mat-column-Posici-n"],
+mat-cell[class*="mat-column-Peso"] {
   justify-content: center;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -1,7 +1,7 @@
 <mat-table [dataSource]="dataSource()">
   @for (column of displayedColumns(); track $index) {
   <ng-container matColumnDef="{{ column }}">
-    <mat-header-cell *matHeaderCellDef> {{ column }} </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>{{ column }}</mat-header-cell>
     <mat-cell *matCellDef="let element">
       @if (isActionColumn(element, $index)) {
         @for (action of getArrayActions(element, $index); track $index) {
@@ -36,7 +36,9 @@
           >
           </mat-slide-toggle>
         } @else {
-          {{ getElementColumn(element, $index) }}
+          <span class="text-ellipsis">
+            {{ getElementColumn(element, $index) }}
+          </span>
         }
       }
     </mat-cell>
