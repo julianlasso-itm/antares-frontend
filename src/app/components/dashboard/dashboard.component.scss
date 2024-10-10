@@ -80,4 +80,10 @@
 
 .blur-effect {
   filter: blur(4px);
+  transition: filter 150ms ease-in-out;
+}
+
+.no-blur-effect {
+  filter: blur(0px);
+  transition: filter 250ms ease-in-out;
 }
