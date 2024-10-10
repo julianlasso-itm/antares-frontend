@@ -28,7 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, inMemoryScrollingFeature),
     provideAnimationsAsync(),
     provideToastr({
-      maxOpened:4,
+      maxOpened: 4,
       preventDuplicates: true,
     }),
     provideHttpClient(),
