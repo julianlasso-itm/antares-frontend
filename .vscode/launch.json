@@ -4,9 +4,9 @@
   "configurations": [
     {
       "name": "ng serve",
-      "type": "chrome",
+      "type": "firefox",
       "request": "launch",
-      "preLaunchTask": "npm: start",
+      "preLaunchTask": "bun: start",
       "url": "http://localhost:4200/",
       "postDebugTask": "bun: stop",
     },
