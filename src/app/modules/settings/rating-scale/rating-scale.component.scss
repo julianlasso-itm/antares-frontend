@@ -1,0 +1,12 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+
+  app-table {
+    min-width: fit-content;
+    width: 70%;
+    max-width: 100%;
+  }
+}
