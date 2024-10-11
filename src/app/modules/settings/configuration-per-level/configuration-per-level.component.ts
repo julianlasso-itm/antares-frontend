@@ -21,8 +21,23 @@ import { IConfigurationPerLevel } from './configuration-per-level.interface';
   selector: 'app-configuration-per-level',
   standalone: true,
   imports: [MatProgressSpinnerModule, TableComponent],
-  templateUrl: './configuration-per-level.component.html',
-  styleUrl: './configuration-per-level.component.scss',
+  templateUrl: '../../../components/generic-crud/generic-crud.component.html',
+  styles: [
+    `
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+
+        app-table {
+          min-width: fit-content;
+          width: 55%;
+          max-width: 100%;
+        }
+      }
+    `,
+  ],
 })
 export class ConfigurationPerLevelComponent extends GenericCrudComponent<IConfigurationPerLevel> {
   constructor() {

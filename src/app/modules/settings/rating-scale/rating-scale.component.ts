@@ -20,8 +20,23 @@ import { IRatingScale } from './rating-scale.interface';
   selector: 'app-rating-scale',
   standalone: true,
   imports: [MatProgressSpinnerModule, TableComponent],
-  templateUrl: './rating-scale.component.html',
-  styleUrl: './rating-scale.component.scss',
+  templateUrl: '../../../components/generic-crud/generic-crud.component.html',
+  styles: [
+    `
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+
+        app-table {
+          min-width: fit-content;
+          width: 70%;
+          max-width: 100%;
+        }
+      }
+    `,
+  ],
 })
 export class RatingScaleComponent extends GenericCrudComponent<IRatingScale> {
   constructor() {

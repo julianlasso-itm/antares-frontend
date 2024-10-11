@@ -17,8 +17,23 @@ import { IConfiguration } from './configuration.interface';
   selector: 'app-configurations',
   standalone: true,
   imports: [MatProgressSpinnerModule, TableComponent],
-  templateUrl: './configurations.component.html',
-  styleUrl: './configurations.component.scss',
+  templateUrl: '../../../components/generic-crud/generic-crud.component.html',
+  styles: [
+    `
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+
+        app-table {
+          min-width: fit-content;
+          width: 40%;
+          max-width: 100%;
+        }
+      }
+    `,
+  ],
 })
 export class ConfigurationsComponent extends GenericCrudComponent<IConfiguration> {
   private readonly _router = inject(Router);

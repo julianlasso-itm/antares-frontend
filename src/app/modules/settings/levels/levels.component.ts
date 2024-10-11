@@ -18,8 +18,23 @@ import { ILevel } from './level.interface';
   selector: 'app-levels',
   standalone: true,
   imports: [MatProgressSpinnerModule, TableComponent],
-  templateUrl: './levels.component.html',
-  styleUrl: './levels.component.scss',
+  templateUrl: '../../../components/generic-crud/generic-crud.component.html',
+  styles: [
+    `
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+
+        app-table {
+          min-width: fit-content;
+          width: fit-content;
+          max-width: 100%;
+        }
+      }
+    `,
+  ],
 })
 export class LevelsComponent extends GenericCrudComponent<ILevel> {
   private readonly route = inject(ActivatedRoute);
