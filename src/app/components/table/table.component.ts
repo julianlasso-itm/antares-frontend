@@ -83,21 +83,21 @@ export class TableComponent implements OnInit {
       for (const field of fields) {
         element = element[field];
       }
-      return element.length > 100 ? element.slice(0, 50) + '...' : element;
+      return element.length > 40 ? element.slice(0, 40) + '...' : element;
     }
     const value = element[this.columns()[index].field];
     if (value) {
-      return value.length > 100 ? value.slice(0, 50) + '...' : value;
+      return value.length > 40 ? value.slice(0, 40) + '...' : value;
     }
     return null;
   }
 
   getTextForTooltip(element: any, index: number): string | null {
     const value = this.getElementColumn(element, index);
-    if (value?.endsWith('...')) {
+    if (value?.toString().endsWith('...')) {
       return element[this.columns()[index].field];
     }
-    return null; 
+    return null;
   }
 
   getArrayActions(element: any, index: number): IAction[] {
