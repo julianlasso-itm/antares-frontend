@@ -1,7 +1,9 @@
 <div class="notifications">
   <button
     type="button"
-    matTooltip="Notificaciones"
+    ngxTippy="Notificaciones"
+    [tippyClassName]="customClassTooltip"
+    [tippyProps]="tooltipsProps"
     mat-icon-button
     (click)="openDialog()"
   >

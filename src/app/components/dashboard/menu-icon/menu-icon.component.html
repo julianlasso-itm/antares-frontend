@@ -6,8 +6,15 @@
     <button
       mat-icon-button
       (click)="changeMenu(item.children)"
-      matTooltip="{{ item.title }}"
-      matTooltipPosition="after"
+      [ngxTippy]="item.title"
+      [tippyClassName]="customClassTooltip"
+      [tippyProps]="{
+        placement: 'right',
+        theme: 'dark',
+        arrow: true,
+        animation: 'scale',
+        duration: 150
+      }"
     >
       <mat-icon class="material-symbols-rounded">{{ item.icon }}</mat-icon>
     </button>

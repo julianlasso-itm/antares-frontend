@@ -3,7 +3,11 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxTippyModule } from 'ngx-tippy-wrapper';
+import {
+  customClassTooltip,
+  tooltipsProps,
+} from '../../../template/tooltips.props';
 import { NotificationsModalComponent } from './notifications-modal/notifications-modal.component';
 
 @Component({
@@ -14,13 +18,15 @@ import { NotificationsModalComponent } from './notifications-modal/notifications
     MatButtonModule,
     MatBadgeModule,
     MatDialogModule,
-    MatTooltipModule,
+    NgxTippyModule,
   ],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss',
 })
 export class NotificationsComponent {
   private readonly dialog = inject(MatDialog);
+  customClassTooltip = customClassTooltip;
+  tooltipsProps = tooltipsProps;
 
   constructor() {}
 

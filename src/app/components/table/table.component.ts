@@ -18,8 +18,9 @@ import {
 } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxTippyModule } from 'ngx-tippy-wrapper';
 import { PaginatorSpanishIntl } from '../../services/paginator-spanish-intl.service';
+import { customClassTooltip, tooltipsProps } from '../template/tooltips.props';
 import { IAction } from './action.interface';
 import { IDisplayedColumn } from './displayed-columns.interface';
 import { Paginator } from './paginator.class';
@@ -33,7 +34,7 @@ import { Paginator } from './paginator.class';
     MatPaginatorModule,
     MatSlideToggleModule,
     MatTableModule,
-    MatTooltipModule,
+    NgxTippyModule,
   ],
   providers: [
     {
@@ -51,6 +52,8 @@ export class TableComponent implements OnInit {
   @Output() pageEvent: EventEmitter<PageEvent>;
 
   displayedColumns: Signal<string[]>;
+  tooltipsProps = tooltipsProps;
+  customClassTooltip = customClassTooltip;
 
   constructor() {
     this.columns = signal([]);
@@ -74,15 +77,27 @@ export class TableComponent implements OnInit {
     return false;
   }
 
-  getElementColumn(element: any, index: number): string {
+  getElementColumn(element: any, index: number): string | null {
     if (this.columns()[index].field.includes('.')) {
       const fields = this.columns()[index].field.split('.');
       for (const field of fields) {
         element = element[field];
       }
-      return element;
+      return element.length > 100 ? element.slice(0, 50) + '...' : element;
     }
-    return element[this.columns()[index].field];
+    const value = element[this.columns()[index].field];
+    if (value) {
+      return value.length > 100 ? value.slice(0, 50) + '...' : value;
+    }
+    return null;
+  }
+
+  getTextForTooltip(element: any, index: number): string | null {
+    const value = this.getElementColumn(element, index);
+    if (value?.endsWith('...')) {
+      return element[this.columns()[index].field];
+    }
+    return null; 
   }
 
   getArrayActions(element: any, index: number): IAction[] {

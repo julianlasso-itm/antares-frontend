@@ -33,6 +33,15 @@ body {
   height: 100%;
 }
 
+.tippy-box[data-theme~=dark].custom-class-tooltip {
+  background-color: #222;
+  color: #fff;
+
+  .tippy-arrow {
+    color: #222;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;

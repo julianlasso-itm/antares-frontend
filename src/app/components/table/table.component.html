@@ -12,8 +12,9 @@
             <button
               mat-icon-button
               (click)="handleAction($event, action)"
-              matTooltip="{{ action.tooltip }}"
-              matTooltipPosition="above"
+              [ngxTippy]="action.tooltip"
+              [tippyClassName]="customClassTooltip"
+              [tippyProps]="tooltipsProps"
             >
               <mat-icon class="material-symbols-rounded">
                 {{ action.icon }}
@@ -28,15 +29,21 @@
           <mat-slide-toggle
             color="primary"
             [checked]="getElementColumn(element, $index)"
-            matTooltip="{{
+            [ngxTippy]="
               getElementColumn(element, $index) ? 'Deshabilitar' : 'Habilitar'
-            }}"
-            matTooltipPosition="above"
+            "
+            [tippyClassName]="customClassTooltip"
+            [tippyProps]="tooltipsProps"
             (change)="handleStatusChange(element.actions)"
           >
           </mat-slide-toggle>
         } @else {
-          <span class="text-ellipsis">
+          <span
+            class="text-ellipsis"
+            [ngxTippy]="getTextForTooltip(element, $index)"
+            [tippyClassName]="customClassTooltip"
+            [tippyProps]="tooltipsProps"
+          >
             {{ getElementColumn(element, $index) }}
           </span>
         }

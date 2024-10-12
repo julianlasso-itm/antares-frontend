@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { NgxTippyModule } from 'ngx-tippy-wrapper';
 import {
   MenuElement,
   MenuItem,
@@ -18,11 +18,15 @@ import {
   menuStruct,
 } from '../../../menu.struct';
 import { MenuService } from '../../../services/menu.service';
+import {
+  customClassTooltip,
+  tooltipsProps,
+} from '../../template/tooltips.props';
 
 @Component({
   selector: 'app-menu-icon',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, NgxTippyModule],
   templateUrl: './menu-icon.component.html',
   styleUrl: './menu-icon.component.scss',
 })
@@ -33,6 +37,8 @@ export class MenuIconComponent implements OnInit {
   private readonly menuService = inject(MenuService);
   private readonly router = inject(Router);
   menu: Signal<MenuStruct[]>;
+  customClassTooltip = customClassTooltip;
+  tooltipsProps = tooltipsProps;
 
   constructor() {
     this.menu = signal(menuStruct);
