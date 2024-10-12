@@ -9,7 +9,7 @@ import {
   TypeInput,
 } from '../../../components/modal-for-form/modal-for-form.interface';
 import { TableComponent } from '../../../components/table/table.component';
-import { ITechnologyType } from './technology-types.interface';
+import { ITechnologyType } from './technology-type.interface';
 
 @Component({
   selector: 'app-technology-types',
