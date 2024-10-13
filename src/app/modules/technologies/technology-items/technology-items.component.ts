@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, signal, WritableSignal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { catchError, lastValueFrom, map, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ISelectData } from '../../../components/form/select-data.interface';
 import { GenericCrudComponent } from '../../../components/generic-crud/generic-crud.component';
@@ -125,7 +125,7 @@ export class TechnologyItemsComponent extends GenericCrudComponent<ITechnologyTy
         placeholder: 'Tipo del item de tecnología',
         icon: 'auto_stories',
         loadOptions: this.loadTypes(),
-        selectionChange: () => {},
+        selectionChange: () => of(),
         formControl: signal(
           new FormControl(null, {
             nonNullable: true,
@@ -157,36 +157,34 @@ export class TechnologyItemsComponent extends GenericCrudComponent<ITechnologyTy
     return signal(fields);
   }
 
-  private loadTypes(): Promise<WritableSignal<ISelectData[]>> {
+  private loadTypes(): Observable<WritableSignal<ISelectData[]>> {
     const param = new HttpParams().set('page', '0').set('size', '99999999');
-    return lastValueFrom(
-      this._http$
-        .get<IResponse<IFindAllResponse<ITechnologyType>>>(
-          `${environment.endpoint.technologies.types}`,
-          param
-        )
-        .pipe(
-          map((response) => {
-            return signal(
-              response.value.data.map(
-                (technologyType) =>
-                  ({
-                    value: technologyType.technologyTypeId,
-                    label: technologyType.name,
-                  } as ISelectData)
-              )
-            );
-          }),
-          catchError((error) => {
-            this.showSnackBar(
-              'Error al cargar los tipos de tecnologías',
-              'error'
-            );
-            console.error(error);
-            return of(signal([]));
-          })
-        )
-    );
+    return this._http$
+      .get<IResponse<IFindAllResponse<ITechnologyType>>>(
+        `${environment.endpoint.technologies.types}`,
+        param
+      )
+      .pipe(
+        map((response) => {
+          return signal(
+            response.value.data.map(
+              (technologyType) =>
+                ({
+                  value: technologyType.technologyTypeId,
+                  label: technologyType.name,
+                } as ISelectData)
+            )
+          );
+        }),
+        catchError((error) => {
+          this.showSnackBar(
+            'Error al cargar los tipos de tecnologías',
+            'error'
+          );
+          console.error(error);
+          return of(signal([]));
+        })
+      );
   }
 
   protected override changeStatusSubmit(data: ITechnologyItem): void {

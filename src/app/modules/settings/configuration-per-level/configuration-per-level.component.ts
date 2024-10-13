@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, signal, WritableSignal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { catchError, lastValueFrom, map, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ISelectData } from '../../../components/form/select-data.interface';
 import { GenericCrudComponent } from '../../../components/generic-crud/generic-crud.component';
@@ -85,7 +85,7 @@ export class ConfigurationPerLevelComponent extends GenericCrudComponent<IConfig
         placeholder: 'Nombre de la configuración',
         icon: 'settings',
         loadOptions: this.loadConfigurations(),
-        selectionChange: () => {},
+        selectionChange: () => of(),
         formControl: signal(
           new FormControl(null, {
             nonNullable: true,
@@ -106,7 +106,7 @@ export class ConfigurationPerLevelComponent extends GenericCrudComponent<IConfig
         placeholder: 'Nombre del nivel',
         icon: 'altitude',
         loadOptions: this.loadLevels(),
-        selectionChange: () => {},
+        selectionChange: () => of(),
         formControl: signal(
           new FormControl(null, {
             nonNullable: true,
@@ -161,63 +161,59 @@ export class ConfigurationPerLevelComponent extends GenericCrudComponent<IConfig
     return signal(fields);
   }
 
-  private loadConfigurations(): Promise<WritableSignal<ISelectData[]>> {
+  private loadConfigurations(): Observable<WritableSignal<ISelectData[]>> {
     const param = new HttpParams().set('page', '0').set('size', '99999999');
-    return lastValueFrom(
-      this._http$
-        .get<IResponse<IFindAllResponse<IConfiguration>>>(
-          `${environment.endpoint.assessments.configurations}`,
-          param
-        )
-        .pipe(
-          map((response) => {
-            return signal(
-              response.value.data.map(
-                (configuration) =>
-                  ({
-                    value: configuration.configurationLevelId,
-                    label: configuration.name,
-                  } as ISelectData)
-              )
-            );
-          }),
-          catchError((error) => {
-            this.showSnackBar('Error al cargar las configuraciones', 'error');
-            console.error(error);
-            return of(signal([]));
-          })
-        )
-    );
+    return this._http$
+      .get<IResponse<IFindAllResponse<IConfiguration>>>(
+        `${environment.endpoint.assessments.configurations}`,
+        param
+      )
+      .pipe(
+        map((response) => {
+          return signal(
+            response.value.data.map(
+              (configuration) =>
+                ({
+                  value: configuration.configurationLevelId,
+                  label: configuration.name,
+                } as ISelectData)
+            )
+          );
+        }),
+        catchError((error) => {
+          this.showSnackBar('Error al cargar las configuraciones', 'error');
+          console.error(error);
+          return of(signal([]));
+        })
+      );
   }
 
-  private loadLevels(): Promise<WritableSignal<ISelectData[]>> {
+  private loadLevels(): Observable<WritableSignal<ISelectData[]>> {
     console.log('Cargando niveles');
     const param = new HttpParams().set('page', '0').set('size', '99999999');
-    return lastValueFrom(
-      this._http$
-        .get<IResponse<IFindAllResponse<ILevel>>>(
-          `${environment.endpoint.assessments.levels}`,
-          param
-        )
-        .pipe(
-          map((response) => {
-            return signal(
-              response.value.data.map(
-                (level) =>
-                  ({
-                    value: level.levelId,
-                    label: level.name,
-                  } as ISelectData)
-              )
-            );
-          }),
-          catchError((error) => {
-            this.showSnackBar('Error al cargar los niveles', 'error');
-            console.error(error);
-            return of(signal([]));
-          })
-        )
-    );
+    return this._http$
+      .get<IResponse<IFindAllResponse<ILevel>>>(
+        `${environment.endpoint.assessments.levels}`,
+        param
+      )
+      .pipe(
+        map((response) => {
+          return signal(
+            response.value.data.map(
+              (level) =>
+                ({
+                  value: level.levelId,
+                  label: level.name,
+                } as ISelectData)
+            )
+          );
+        }),
+        catchError((error) => {
+          this.showSnackBar('Error al cargar los niveles', 'error');
+          console.error(error);
+          return of(signal([]));
+        })
+      );
   }
 
   protected override changeStatusSubmit(data: IConfigurationPerLevel): void {
