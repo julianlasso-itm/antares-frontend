@@ -8,9 +8,9 @@
           <mat-label>{{ field.label }}</mat-label>
           <mat-select
             formControlName="{{ field.field }}"
-            (selectionChange)="field?.selectionChange($event.value, this.form)"
+            (selectionChange)="selectionChange(field, $event.value, this.form)"
           >
-          @if (field.loadOptions && (field.loadOptions | async); as options) {
+          @if (field?.loadOptions | async; as options) {
             @for (option of options(); track $index) {
               <mat-option [value]="getOptionValue(option)">
                 {{ getOptionLabel(option) }}

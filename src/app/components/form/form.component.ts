@@ -75,7 +75,6 @@ export class FormComponent {
   ngOnInit(): void {
     this.createForm();
     this.formSubscription = this.form().valueChanges.subscribe((value) => {
-      // console.log('form subscription', value);
       this.setFrom();
     });
   }
@@ -120,6 +119,19 @@ export class FormComponent {
       }
     }
     return '';
+  }
+
+  selectionChange(
+    field: FormField,
+    value: string,
+    form: WritableSignal<FormGroup>
+  ) {
+    if (field.selectionChange) {
+      const result = field.selectionChange(value, this.typeForm, form);
+      result.subscribe((value) => {
+        // console.log('selectOptionObservable', value());
+      });
+    }
   }
 
   private setFrom(): void {
