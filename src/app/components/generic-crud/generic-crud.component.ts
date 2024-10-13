@@ -55,6 +55,12 @@ export class GenericCrudComponent<Entity extends IEntity> {
   protected _updateSuccessMessage: string;
   protected _updateErrorMessage: string;
   protected readonly _filter: WritableSignal<string>;
+  protected _dataForModalCreate!: WritableSignal<
+    MatDialogConfig<IModalForForm<Entity>>
+  >;
+  protected _dataForModalUpdate!: WritableSignal<
+    MatDialogConfig<IModalForForm<Entity>>
+  >;
   readonly dataSource: WritableSignal<Entity[]>;
   readonly displayedColumns: WritableSignal<Array<IDisplayedColumn>>;
   readonly loading: WritableSignal<boolean>;
@@ -96,6 +102,12 @@ export class GenericCrudComponent<Entity extends IEntity> {
     this._searchBarSubscription = this._searchBar$.search$.subscribe({
       next: (search) => this.onSearch(search),
     });
+    this._dataForModalCreate = signal(
+      this.generateModalInfo(signal({} as Entity), TypeForm.CREATE)
+    );
+    this._dataForModalUpdate = signal(
+      this.generateModalInfo(signal({} as Entity), TypeForm.UPDATE)
+    );
   }
 
   ngOnDestroy(): void {
@@ -159,7 +171,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
     return {
       disableClose: true,
       autoFocus: false,
-      width: '450px',
+      width: '500px',
       data: {
         title:
           typeForm === TypeForm.CREATE
@@ -205,7 +217,6 @@ export class GenericCrudComponent<Entity extends IEntity> {
         },
         complete: () => {
           this.loading.set(false);
-          console.log('Complete', this.paginator());
         },
       });
   }
@@ -231,17 +242,15 @@ export class GenericCrudComponent<Entity extends IEntity> {
   }
 
   protected OpenModalForCreate(): void {
-    this._dialog.open(
-      ModalForFormComponent,
-      this.generateModalInfo(signal({} as Entity), TypeForm.CREATE)
-    );
+    this._dialog.open(ModalForFormComponent, this._dataForModalCreate());
   }
 
   protected OpenModalForEdit(configuration: Entity): void {
-    this._dialog.open(
-      ModalForFormComponent,
-      this.generateModalInfo(signal(configuration), TypeForm.UPDATE)
-    );
+    this._dataForModalUpdate.update((config) => {
+      config.data?.data.set(configuration);
+      return config;
+    });
+    this._dialog.open(ModalForFormComponent, this._dataForModalUpdate());
   }
 
   protected OpenModalForDelete(entity: Entity): void {
