@@ -111,10 +111,16 @@ export class DomainKnowledgeComponent extends GenericCrudComponent<IDomainKnowle
         loadOptions: new Observable<WritableSignal<ISelectData[]>>(),
         selectionChange: () => of(),
         formControl: signal(
-          new FormControl(null, {
-            nonNullable: true,
-            validators: [Validators.required],
-          })
+          new FormControl(
+            {
+              value: null,
+              disabled: true,
+            },
+            {
+              nonNullable: true,
+              validators: [Validators.required],
+            }
+          )
         ),
         errors: [
           {
@@ -310,6 +316,7 @@ export class DomainKnowledgeComponent extends GenericCrudComponent<IDomainKnowle
     this._dataForModalUpdate.update((config) => {
       config.data?.form().find((field) => {
         if (field.field === 'technologyItemId') {
+          field.formControl().enable();
           field.loadOptions = this.loadItems(
             configuration.technologyTypeId ?? '',
             TypeForm.UPDATE
