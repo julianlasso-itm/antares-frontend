@@ -81,7 +81,7 @@ export class TableComponent implements OnInit {
     if (this.columns()[index].field.includes('.')) {
       const fields = this.columns()[index].field.split('.');
       for (const field of fields) {
-        element = element[field];
+        element = element[field] ?? '';
       }
       return element.length > 40 ? element.slice(0, 40) + '...' : element;
     }
