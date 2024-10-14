@@ -572,11 +572,14 @@ export class DomainKnowledgeLevelsComponent extends GenericCrudComponent<IDomain
     super.updateSubmit(data, form, closeForm);
   }
 
-  protected override OpenModalForEdit(configuration: IDomainKnowledgeLevel): void {
+  protected override OpenModalForEdit(
+    configuration: IDomainKnowledgeLevel
+  ): void {
     configuration = {
       ...configuration,
       technologyTypeId:
-        configuration.domainKnowledge?.technologyItem?.technologyType?.technologyTypeId,
+        configuration.domainKnowledge?.technologyItem?.technologyType
+          ?.technologyTypeId,
       technologyItemId:
         configuration.domainKnowledge?.technologyItem?.technologyItemId,
     };
