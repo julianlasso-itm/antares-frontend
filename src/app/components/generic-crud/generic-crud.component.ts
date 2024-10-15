@@ -1,10 +1,10 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, signal, WritableSignal } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { IFindAllResponse, IResponse } from '../../modules/response.interface';
 import { ButtonAddService } from '../../services/button-add.service';
 import { GlobalProgressBarService } from '../../services/global-progress-bar.service';
@@ -13,11 +13,14 @@ import { MenuService } from '../../services/menu.service';
 import { OperationBackendService } from '../../services/operation-backend.service';
 import { SearchBarService } from '../../services/search-bar.service';
 import { DeleteModalComponent } from '../delete-modal/delete-modal.component';
+import { ISelectData } from '../form/select-data.interface';
 import { ModalForFormComponent } from '../modal-for-form/modal-for-form.component';
 import {
   FormField,
   IModalForForm,
+  TypeError,
   TypeForm,
+  TypeInput,
 } from '../modal-for-form/modal-for-form.interface';
 import { IAction } from '../table/action.interface';
 import { IDisplayedColumn } from '../table/displayed-columns.interface';
@@ -412,6 +415,158 @@ export class GenericCrudComponent<Entity extends IEntity> {
     return signal([]);
   }
 
+  protected createSelectField(options: {
+    field: string;
+    label: string;
+    placeholder: string;
+    icon: string;
+    loadOptions: Observable<WritableSignal<ISelectData[]>>;
+    selectionChange: (...args: any) => Observable<any>;
+    required?: boolean;
+    disabled?: boolean;
+  }): FormField {
+    const errors = options.required
+      ? [
+          {
+            type: TypeError.REQUIRED,
+            message: `${options.label} es requerido`,
+          },
+        ]
+      : [];
+    return {
+      field: options.field,
+      label: options.label,
+      type: TypeInput.SELECT,
+      placeholder: options.placeholder,
+      icon: options.icon,
+      loadOptions: options.loadOptions,
+      selectionChange: options.selectionChange,
+      formControl: signal(
+        new FormControl(
+          {
+            value: null,
+            disabled: options.disabled ?? false,
+          },
+          {
+            nonNullable: true,
+            validators: [
+              options.required ? Validators.required : Validators.nullValidator,
+            ],
+          }
+        )
+      ),
+      errors,
+    };
+  }
+
+  protected createTextField(options: {
+    field: string;
+    label: string;
+    placeholder: string;
+    icon: string;
+    maxLength: number;
+    required?: boolean;
+    disabled?: boolean;
+  }): FormField {
+    const errors = options.required
+      ? [
+          {
+            type: TypeError.REQUIRED,
+            message: `${options.label} es requerido`,
+          },
+        ]
+      : [];
+    return {
+      field: options.field,
+      label: options.label,
+      type: TypeInput.TEXT,
+      placeholder: options.placeholder,
+      icon: options.icon,
+      formControl: signal(
+        new FormControl(
+          {
+            value: null,
+            disabled: options.disabled ?? false,
+          },
+          {
+            nonNullable: true,
+            validators: [
+              options.required ? Validators.required : Validators.nullValidator,
+              Validators.maxLength(options.maxLength),
+            ],
+          }
+        )
+      ),
+      errors: [
+        ...errors,
+        {
+          type: TypeError.MAX_LENGTH,
+          message: `${options.label} no debe exceder los ${options.maxLength} caracteres`,
+        },
+      ],
+    };
+  }
+
+  protected createTextAreaField(options: {
+    field: string;
+    label: string;
+    placeholder: string;
+    icon: string;
+    maxLength: number;
+    required?: boolean;
+    disabled?: boolean;
+  }): FormField {
+    const errors = options.required
+      ? [
+          {
+            type: TypeError.REQUIRED,
+            message: `${options.label} es requerido`,
+          },
+        ]
+      : [];
+    return {
+      field: options.field,
+      label: options.label,
+      type: TypeInput.TEXTAREA,
+      placeholder: options.placeholder,
+      icon: options.icon,
+      formControl: signal(
+        new FormControl(
+          {
+            value: null,
+            disabled: options.disabled ?? false,
+          },
+          {
+            validators: [
+              options.required ? Validators.required : Validators.nullValidator,
+              Validators.maxLength(options.maxLength),
+            ],
+          }
+        )
+      ),
+      errors: [
+        ...errors,
+        {
+          type: TypeError.MAX_LENGTH,
+          message: `${options.label} no debe exceder los ${options.maxLength} caracteres`,
+        },
+      ],
+    };
+  }
+
+  protected createHiddenField(field: string): FormField {
+    return {
+      field,
+      type: TypeInput.HIDDEN,
+      formControl: signal(
+        new FormControl(null, {
+          nonNullable: true,
+          validators: [Validators.required],
+        })
+      ),
+    };
+  }
+
   protected showSnackBar(
     message: string,
     type: 'success' | 'error' | 'info' | 'warning'
@@ -470,6 +625,67 @@ export class GenericCrudComponent<Entity extends IEntity> {
     return this.successMessages[
       Math.floor(Math.random() * this.successMessages.length)
     ];
+  }
+
+  protected mapDataToISelectData<IType>(
+    response: IResponse<IFindAllResponse<IType>>,
+    record: { value: string; label: string },
+    defaultValue?: ISelectData
+  ): WritableSignal<ISelectData[]> {
+    const getValueByPath = (obj: Record<string, any>, path: string): any => {
+      return path.split('.').reduce((acc, key) => acc?.[key], obj);
+    };
+
+    const uniqueDataMap = new Map<string, ISelectData>();
+    if (defaultValue) {
+      uniqueDataMap.set(
+        `${defaultValue.value}-${defaultValue.label}`,
+        defaultValue
+      );
+    }
+
+    response.value.data.forEach((type) => {
+      const value = getValueByPath(type as Record<string, any>, record.value);
+      const label = getValueByPath(type as Record<string, any>, record.label);
+      const key = `${value}-${label}`;
+
+      if (!uniqueDataMap.has(key)) {
+        uniqueDataMap.set(key, { value, label } as ISelectData);
+      }
+    });
+
+    const data = Array.from(uniqueDataMap.values());
+
+    return signal(data);
+  }
+
+  protected updateOptions<IType>(
+    config: MatDialogConfig<IModalForForm<IType>>,
+    data: WritableSignal<ISelectData[]>,
+    targetField: string
+  ): MatDialogConfig<IModalForForm<IType>> {
+    config.data?.form().find((field) => {
+      if (field.field !== targetField) {
+        return;
+      }
+
+      if (data().length > 0) {
+        field.loadOptions = of(data);
+        return;
+      }
+
+      field.loadOptions = of(signal([]));
+    });
+    return config;
+  }
+
+  protected catchError(
+    error: Error,
+    message: string
+  ): Observable<WritableSignal<ISelectData[]>> {
+    this.showSnackBar(message, 'error');
+    console.error(error);
+    return of(signal([]));
   }
 
   private getRandomErrorMessage(): string {
