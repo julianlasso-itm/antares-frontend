@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   inject,
   Inject,
   signal,
@@ -37,6 +38,11 @@ export class ModalForFormComponent {
   private _operationBackendSubscription: Subscription;
   private readonly _operationBackendService = inject(OperationBackendService);
   operationBackend: WritableSignal<boolean>;
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent) {
+    this.close();
+  }
 
   constructor(
     public dialogRef: MatDialogRef<ModalForFormComponent>,

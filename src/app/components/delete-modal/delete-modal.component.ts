@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, HostListener, inject, model } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -16,6 +16,11 @@ import { IDeleteModalData } from './delete-modal-data.interface';
   styleUrl: './delete-modal.component.scss',
 })
 export class DeleteModalComponent {
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent) {
+    this.close();
+  }
+
   private readonly _modalStateService = inject(ModalStateService);
   private readonly _dialogRef = inject(MatDialogRef<DeleteModalComponent>);
   readonly _data = inject<IDeleteModalData>(MAT_DIALOG_DATA);
