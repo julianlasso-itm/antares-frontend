@@ -366,15 +366,6 @@ export class DomainKnowledgeComponent extends GenericCrudComponent<IDomainKnowle
     );
   }
 
-  private catchError(
-    error: Error,
-    message: string
-  ): Observable<WritableSignal<ISelectData[]>> {
-    this.showSnackBar(message, 'error');
-    console.error(error);
-    return of(signal([]));
-  }
-
   private updateTechnologyItemOptions(
     config: MatDialogConfig<IModalForForm<IDomainKnowledge>>,
     data: WritableSignal<ISelectData[]>

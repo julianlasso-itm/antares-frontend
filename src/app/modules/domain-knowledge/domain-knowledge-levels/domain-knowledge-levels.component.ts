@@ -465,15 +465,6 @@ export class DomainKnowledgeLevelsComponent extends GenericCrudComponent<IDomain
     );
   }
 
-  private catchError(
-    error: Error,
-    message: string
-  ): Observable<WritableSignal<ISelectData[]>> {
-    this.showSnackBar(message, 'error');
-    console.error(error);
-    return of(signal([]));
-  }
-
   private mapDataToISelectDataForITechnologyItem(
     response: IResponse<IFindAllResponse<ITechnologyItem>>
   ): WritableSignal<ISelectData[]> {
