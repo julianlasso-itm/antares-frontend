@@ -10,6 +10,9 @@ export const environment = {
       domainKnowledge: '/assessments/domain-knowledge',
       domainKnowledgeLevels: '/assessments/domain-knowledge-levels',
       domainQuestionsAnswers: '/assessments/domain-questions-answers',
+      findOne: {
+        domainKnowledgeLevels: '/assessments/domain-knowledge-levels/find-one',
+      },
       levels: '/assessments/levels',
       ratingScale: '/assessments/rating-scale',
     },
