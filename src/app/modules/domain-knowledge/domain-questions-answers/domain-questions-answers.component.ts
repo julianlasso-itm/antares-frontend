@@ -447,19 +447,19 @@ export class DomainQuestionsAnswersComponent extends GenericCrudComponent<IDomai
       domainQuestionAnswerId: configuration.domainQuestionAnswerId,
 
       technologyTypeId:
-        configuration.domainKnowledge?.technologyItem?.technologyType
-          ?.technologyTypeId ??
         configuration.domainKnowledgeLevel?.domainKnowledge.technologyItem
-          .technologyType.technologyTypeId,
+          .technologyType.technologyTypeId ??
+        configuration.domainKnowledge?.technologyItem?.technologyType
+          ?.technologyTypeId,
 
       technologyItemId:
-        configuration.domainKnowledge?.technologyItem?.technologyItemId ??
         configuration.domainKnowledgeLevel?.domainKnowledge.technologyItem
-          .technologyItemId,
+          .technologyItemId ??
+        configuration.domainKnowledge?.technologyItem?.technologyItemId,
 
       domainKnowledgeId:
-        configuration.domainKnowledgeId ??
-        configuration.domainKnowledgeLevel?.domainKnowledge?.domainKnowledgeId,
+        configuration.domainKnowledgeLevel?.domainKnowledge
+          ?.domainKnowledgeId ?? configuration.domainKnowledgeId,
 
       levelId: configuration.domainKnowledgeLevel?.level?.levelId,
     };
