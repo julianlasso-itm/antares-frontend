@@ -57,7 +57,7 @@ export const menuStruct: MenuStruct[] = [
       {
         title: 'Brechas de conocimiento',
         path: 'knowledge-gaps/gaps',
-        icon: 'network_intelligence_update',
+        icon: 'network_intelligence_history',
         loadComponent: () =>
           import(
             './modules/knowledge-gaps/knowledge-gaps/knowledge-gaps.component'
@@ -107,18 +107,9 @@ export const menuStruct: MenuStruct[] = [
           ),
       },
       {
-        title: 'Profesionales',
-        path: 'projects/professionals',
-        icon: 'groups',
-        loadComponent: () =>
-          import(
-            './modules/projects-management/role-per-professional/role-per-professional.component'
-          ).then((component) => component.RolePerProfessionalComponent),
-      },
-      {
         title: 'Stack tecnológico',
         path: 'projects/technology-stack',
-        icon: 'settings',
+        icon: 'stack',
         loadComponent: () =>
           import(
             './modules/projects-management/technology-stack/technology-stack.component'
@@ -127,11 +118,20 @@ export const menuStruct: MenuStruct[] = [
       {
         title: 'Stack tecnológico por rol',
         path: 'projects/technology-per-role',
-        icon: 'settings',
+        icon: 'layers',
         loadComponent: () =>
           import(
             './modules/projects-management/technology-per-role/technology-per-role.component'
           ).then((component) => component.TechnologyPerRoleComponent),
+      },
+      {
+        title: 'Profesionales',
+        path: 'projects/professionals',
+        icon: 'groups',
+        loadComponent: () =>
+          import(
+            './modules/projects-management/role-per-professional/role-per-professional.component'
+          ).then((component) => component.RolePerProfessionalComponent),
       },
     ],
   },
@@ -170,7 +170,7 @@ export const menuStruct: MenuStruct[] = [
       {
         title: 'Dom. de con. por nivel',
         path: 'technologies/domain-knowledge-levels',
-        icon: 'domain_verification',
+        icon: 'host',
         loadComponent: () =>
           import(
             './modules/domain-knowledge/domain-knowledge-levels/domain-knowledge-levels.component'
@@ -179,7 +179,7 @@ export const menuStruct: MenuStruct[] = [
       {
         title: 'Preguntas y respuestas',
         path: 'technologies/domain-questions-answers',
-        icon: 'domain_verification',
+        icon: 'quiz',
         loadComponent: () =>
           import(
             './modules/domain-knowledge/domain-questions-answers/domain-questions-answers.component'
@@ -219,7 +219,7 @@ export const menuStruct: MenuStruct[] = [
       {
         title: 'Nivel por configuración',
         path: 'settings/configuration-per-level',
-        icon: 'altitude',
+        icon: 'perm_data_setting',
         loadComponent: () =>
           import(
             './modules/settings/configuration-per-level/configuration-per-level.component'
