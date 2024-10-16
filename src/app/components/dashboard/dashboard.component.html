@@ -12,6 +12,17 @@
           <h1>{{ title() }}</h1>
           <div class="spacer"></div>
           <div class="actions">
+            @if (buttonAssistantVisible()) {
+              <button
+                mat-icon-button
+                (click)="buttonAssistantAction()()"
+                ngxTippy="Asistente"
+                [tippyClassName]="customClassTooltip"
+                [tippyProps]="tooltipsProps"
+              >
+                <mat-icon svgIcon="sparkles"></mat-icon>
+              </button>
+            }
             @if (buttonAddVisible()) {
               <button
                 mat-flat-button

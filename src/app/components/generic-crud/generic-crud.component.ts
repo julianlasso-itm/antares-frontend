@@ -6,7 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Observable, of, Subscription } from 'rxjs';
 import { IFindAllResponse, IResponse } from '../../modules/response.interface';
-import { ButtonAddService } from '../../services/button-add.service';
+import { ButtonHeaderService } from '../../services/button-header.service';
 import { GlobalProgressBarService } from '../../services/global-progress-bar.service';
 import { HttpService } from '../../services/http.service';
 import { MenuService } from '../../services/menu.service';
@@ -35,7 +35,7 @@ import { IEntity } from './entity.interface';
 })
 export class GenericCrudComponent<Entity extends IEntity> {
   protected _searchBarSubscription: Subscription;
-  protected readonly _buttonAdd$ = inject(ButtonAddService);
+  protected readonly _buttonHeader$ = inject(ButtonHeaderService);
   protected readonly _dialog = inject(MatDialog);
   protected readonly _globalProgressBar$ = inject(GlobalProgressBarService);
   protected readonly _http$ = inject(HttpService);
@@ -99,8 +99,10 @@ export class GenericCrudComponent<Entity extends IEntity> {
   }
 
   ngOnInit(): void {
-    this._buttonAdd$.visible = true;
-    this._buttonAdd$.action = this.OpenModalForCreate.bind(this);
+    this._buttonHeader$.visibleAssistant = false;
+    this._buttonHeader$.actionAssistant = () => {console.log('Asistente')};
+    this._buttonHeader$.visibleAdd = true;
+    this._buttonHeader$.actionAdd = this.OpenModalForCreate.bind(this);
     this.getDataSource();
     this._searchBarSubscription = this._searchBar$.search$.subscribe({
       next: (search) => this.onSearch(search),
