@@ -44,24 +44,24 @@ export class ProjectsComponent extends GenericCrudComponent<IProject> {
       { name: 'Acciones', field: 'actions' },
     ]);
     this._urlBackend = environment.endpoint.projectsManagement.projects;
-    this._searchBar$.placeholder = 'Buscar un cliente';
-    this._errorMessageLoad = 'Error al cargar los clientes de la empresa';
+    this._searchBar$.placeholder = 'Buscar un proyecto';
+    this._errorMessageLoad = 'Error al cargar los proyectos';
     this._titleForModal = {
-      create: 'Registrar un cliente',
-      update: 'Actualizar un cliente',
-      delete: 'Eliminar un cliente',
+      create: 'Registrar un proyecto',
+      update: 'Actualizar un proyecto',
+      delete: 'Eliminar un proyecto',
     };
-    this._deletingInProgressMessage = 'Eliminando un cliente';
-    this._deleteSuccessMessage = 'Se ha eliminado un cliente';
-    this._deleteErrorMessage = 'Error al eliminar un cliente';
-    this._updatingStatusMessage = 'Actualizando un cliente';
+    this._deletingInProgressMessage = 'Eliminando un proyecto';
+    this._deleteSuccessMessage = 'Se ha eliminado un proyecto';
+    this._deleteErrorMessage = 'Error al eliminar un proyecto';
+    this._updatingStatusMessage = 'Actualizando un proyecto';
     this._updatingStatusSuccessMessage =
       'Se ha actualizado el estado del registro';
     this._updatingStatusErrorMessage = 'Error al actualizar el estado';
-    this._createSuccessMessage = 'Se ha registrado un cliente';
-    this._createErrorMessage = 'Error al registrar un cliente';
-    this._updateSuccessMessage = 'Se ha actualizado un cliente';
-    this._updateErrorMessage = 'Error al actualizar un cliente';
+    this._createSuccessMessage = 'Se ha registrado un proyecto';
+    this._createErrorMessage = 'Error al registrar un proyecto';
+    this._updateSuccessMessage = 'Se ha actualizado un proyecto';
+    this._updateErrorMessage = 'Error al actualizar un proyecto';
   }
 
   protected override getFieldsInfo(
@@ -81,7 +81,7 @@ export class ProjectsComponent extends GenericCrudComponent<IProject> {
         field: 'name',
         label: 'Nombre',
         placeholder: 'Nombre del cliente',
-        icon: 'deployed_code',
+        icon: 'inventory',
         maxLength: 500,
         required: true,
       }),
