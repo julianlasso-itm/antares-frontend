@@ -86,6 +86,11 @@ export class DomainQuestionsAnswersComponent extends GenericCrudComponent<IDomai
       'Error al actualizar una pregunta y su respuesta en un dominio de conocimiento';
   }
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this._buttonHeader$.visibleAssistant = true;
+  }
+
   protected override getFieldsInfo(
     withId: boolean = false
   ): WritableSignal<FormField[]> {
