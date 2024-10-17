@@ -100,7 +100,9 @@ export class GenericCrudComponent<Entity extends IEntity> {
 
   ngOnInit(): void {
     this._buttonHeader$.visibleAssistant = false;
-    this._buttonHeader$.actionAssistant = () => {console.log('Asistente')};
+    this._buttonHeader$.actionAssistant = () => {
+      console.log('Asistente');
+    };
     this._buttonHeader$.visibleAdd = true;
     this._buttonHeader$.actionAdd = this.OpenModalForCreate.bind(this);
     this.getDataSource();
@@ -417,7 +419,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
     return signal([]);
   }
 
-  protected createSelectField(options: {
+  protected createSelectField(properties: {
     field: string;
     label: string;
     placeholder: string;
@@ -427,32 +429,34 @@ export class GenericCrudComponent<Entity extends IEntity> {
     required?: boolean;
     disabled?: boolean;
   }): FormField {
-    const errors = options.required
+    const errors = properties.required
       ? [
           {
             type: TypeError.REQUIRED,
-            message: `${options.label} es requerido`,
+            message: `${properties.label} es requerido`,
           },
         ]
       : [];
     return {
-      field: options.field,
-      label: options.label,
+      field: properties.field,
+      label: properties.label,
       type: TypeInput.SELECT,
-      placeholder: options.placeholder,
-      icon: options.icon,
-      loadOptions: options.loadOptions,
-      selectionChange: options.selectionChange,
+      placeholder: properties.placeholder,
+      icon: properties.icon,
+      loadOptions: properties.loadOptions,
+      selectionChange: properties.selectionChange,
       formControl: signal(
         new FormControl(
           {
             value: null,
-            disabled: options.disabled ?? false,
+            disabled: properties.disabled ?? false,
           },
           {
             nonNullable: true,
             validators: [
-              options.required ? Validators.required : Validators.nullValidator,
+              properties.required
+                ? Validators.required
+                : Validators.nullValidator,
             ],
           }
         )
@@ -461,40 +465,52 @@ export class GenericCrudComponent<Entity extends IEntity> {
     };
   }
 
-  protected createTextField(options: {
+  protected createNumberField(properties: {
     field: string;
     label: string;
     placeholder: string;
     icon: string;
-    maxLength: number;
+    options: {
+      min?: number;
+      max?: number;
+      step?: number;
+    };
     required?: boolean;
     disabled?: boolean;
   }): FormField {
-    const errors = options.required
+    const errors = properties.required
       ? [
           {
             type: TypeError.REQUIRED,
-            message: `${options.label} es requerido`,
+            message: `${properties.label} es requerido`,
           },
         ]
       : [];
     return {
-      field: options.field,
-      label: options.label,
-      type: TypeInput.TEXT,
-      placeholder: options.placeholder,
-      icon: options.icon,
+      field: properties.field,
+      label: properties.label,
+      type: TypeInput.NUMBER,
+      placeholder: properties.placeholder,
+      icon: properties.icon,
+      options: properties.options,
       formControl: signal(
         new FormControl(
           {
             value: null,
-            disabled: options.disabled ?? false,
+            disabled: properties.disabled ?? false,
           },
           {
             nonNullable: true,
             validators: [
-              options.required ? Validators.required : Validators.nullValidator,
-              Validators.maxLength(options.maxLength),
+              properties.required
+                ? Validators.required
+                : Validators.nullValidator,
+              properties.options.min
+                ? Validators.min(properties.options.min)
+                : Validators.nullValidator,
+              properties.options.max
+                ? Validators.max(properties.options.max)
+                : Validators.nullValidator,
             ],
           }
         )
@@ -502,14 +518,18 @@ export class GenericCrudComponent<Entity extends IEntity> {
       errors: [
         ...errors,
         {
+          type: TypeError.MIN,
+          message: `${properties.label} no debe ser menor que ${properties.options.min}`,
+        },
+        {
           type: TypeError.MAX_LENGTH,
-          message: `${options.label} no debe exceder los ${options.maxLength} caracteres`,
+          message: `${properties.label} no debe exceder los ${properties.options.max} caracteres`,
         },
       ],
     };
   }
 
-  protected createTextAreaField(options: {
+  protected createTextField(properties: {
     field: string;
     label: string;
     placeholder: string;
@@ -518,30 +538,33 @@ export class GenericCrudComponent<Entity extends IEntity> {
     required?: boolean;
     disabled?: boolean;
   }): FormField {
-    const errors = options.required
+    const errors = properties.required
       ? [
           {
             type: TypeError.REQUIRED,
-            message: `${options.label} es requerido`,
+            message: `${properties.label} es requerido`,
           },
         ]
       : [];
     return {
-      field: options.field,
-      label: options.label,
-      type: TypeInput.TEXTAREA,
-      placeholder: options.placeholder,
-      icon: options.icon,
+      field: properties.field,
+      label: properties.label,
+      type: TypeInput.TEXT,
+      placeholder: properties.placeholder,
+      icon: properties.icon,
       formControl: signal(
         new FormControl(
           {
             value: null,
-            disabled: options.disabled ?? false,
+            disabled: properties.disabled ?? false,
           },
           {
+            nonNullable: true,
             validators: [
-              options.required ? Validators.required : Validators.nullValidator,
-              Validators.maxLength(options.maxLength),
+              properties.required
+                ? Validators.required
+                : Validators.nullValidator,
+              Validators.maxLength(properties.maxLength),
             ],
           }
         )
@@ -550,7 +573,56 @@ export class GenericCrudComponent<Entity extends IEntity> {
         ...errors,
         {
           type: TypeError.MAX_LENGTH,
-          message: `${options.label} no debe exceder los ${options.maxLength} caracteres`,
+          message: `${properties.label} no debe exceder los ${properties.maxLength} caracteres`,
+        },
+      ],
+    };
+  }
+
+  protected createTextAreaField(properties: {
+    field: string;
+    label: string;
+    placeholder: string;
+    icon: string;
+    maxLength: number;
+    required?: boolean;
+    disabled?: boolean;
+  }): FormField {
+    const errors = properties.required
+      ? [
+          {
+            type: TypeError.REQUIRED,
+            message: `${properties.label} es requerido`,
+          },
+        ]
+      : [];
+    return {
+      field: properties.field,
+      label: properties.label,
+      type: TypeInput.TEXTAREA,
+      placeholder: properties.placeholder,
+      icon: properties.icon,
+      formControl: signal(
+        new FormControl(
+          {
+            value: null,
+            disabled: properties.disabled ?? false,
+          },
+          {
+            validators: [
+              properties.required
+                ? Validators.required
+                : Validators.nullValidator,
+              Validators.maxLength(properties.maxLength),
+            ],
+          }
+        )
+      ),
+      errors: [
+        ...errors,
+        {
+          type: TypeError.MAX_LENGTH,
+          message: `${properties.label} no debe exceder los ${properties.maxLength} caracteres`,
         },
       ],
     };

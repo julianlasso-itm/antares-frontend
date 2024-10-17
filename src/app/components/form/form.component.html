@@ -45,6 +45,24 @@
             <mat-error>{{ errorMessage($index, field) }}</mat-error>
           }
         </mat-form-field>
+      } @case (typeInput.NUMBER) {
+        <mat-form-field class="width-100 margin-bottom-5">
+          <mat-label>{{ field.label }}</mat-label>
+          <input
+            matInput
+            type="{{ field.type }}"
+            name="{{ field.field }}"
+            [formControlName]="field.field"
+            placeholder="{{ field.placeholder }}"
+            min="{{ field.options?.['min'] }}"
+            max="{{ field.options?.['max'] }}"
+            step="{{ field.options?.['step'] }}"
+          />
+          <mat-icon class="material-symbols-rounded" matSuffix>{{ field.icon }}</mat-icon>
+          @if (this.form().invalid) {
+            <mat-error>{{ errorMessage($index, field) }}</mat-error>
+          }
+        </mat-form-field>
       } @default {
         <mat-form-field class="width-100 margin-bottom-5">
           <mat-label>{{ field.label }}</mat-label>

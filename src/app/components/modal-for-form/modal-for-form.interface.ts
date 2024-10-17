@@ -28,7 +28,7 @@ export interface FormField {
   formControl: WritableSignal<FormControl>;
   loadOptions?: Observable<WritableSignal<ISelectData[]>>;
   selectionChange?: (...args: any) => Observable<any>;
-  options?: any[];
+  options?: Record<string, any>;
   defaultValue?: any;
 }
 
