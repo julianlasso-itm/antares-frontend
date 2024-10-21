@@ -134,6 +134,11 @@ export class FormComponent {
     }
   }
 
+  openFileDialog(field: string): void {
+    const input = document.getElementById(field) as HTMLInputElement;
+    input.click();
+  }
+
   private setFrom(): void {
     this.setForm.emit(this.form);
   }

@@ -64,4 +64,5 @@ export enum TypeInput {
   NUMBER = 'number',
   DATE = 'date',
   TIME = 'time',
+  FILE = 'file',
 }

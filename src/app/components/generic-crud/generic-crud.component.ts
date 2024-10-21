@@ -530,6 +530,48 @@ export class GenericCrudComponent<Entity extends IEntity> {
     };
   }
 
+  protected createFileField(properties: {
+    field: string;
+    label: string;
+    placeholder: string;
+    icon: string;
+    required?: boolean;
+    disabled?: boolean;
+  }): FormField {
+    const errors = properties.required
+      ? [
+          {
+            type: TypeError.REQUIRED,
+            message: `${properties.label} es requerido`,
+          },
+        ]
+      : [];
+    return {
+      field: properties.field,
+      label: properties.label,
+      type: TypeInput.FILE,
+      placeholder: properties.placeholder,
+      icon: properties.icon,
+      formControl: signal(
+        new FormControl(
+          {
+            value: null,
+            disabled: properties.disabled ?? false,
+          },
+          {
+            nonNullable: true,
+            validators: [
+              properties.required
+                ? Validators.required
+                : Validators.nullValidator,
+            ],
+          }
+        )
+      ),
+      errors: [...errors],
+    };
+  }
+
   protected createTextField(properties: {
     field: string;
     label: string;
