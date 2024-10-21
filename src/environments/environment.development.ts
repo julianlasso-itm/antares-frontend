@@ -30,6 +30,9 @@ export const environment = {
       roles: '/projects-management/roles',
       technologyPerRole: '/projects-management/technology-per-role',
       technologyStack: '/projects-management/technology-stack',
+      findOne: {
+        technologyStack: '/projects-management/technology-stack/find-one',
+      },
     },
     security: {
       roles: '/security/roles',
