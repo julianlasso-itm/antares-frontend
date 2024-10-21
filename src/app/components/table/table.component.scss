@@ -14,7 +14,8 @@ mat-cell[class*="mat-column-Acciones"],
 mat-cell[class*="mat-column-Estado"],
 mat-cell[class*="mat-column-Peso"],
 mat-cell[class*="mat-column-Posici-n"],
-mat-cell[class*="mat-column-Valor"] {
+mat-cell[class*="mat-column-Valor"],
+mat-cell[class*="mat-column-Tipo-de-documento"] {
   justify-content: center;
 }
 
