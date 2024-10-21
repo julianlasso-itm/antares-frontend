@@ -14,6 +14,7 @@ import { TableComponent } from '../../../components/table/table.component';
 import { IFindAllResponse, IResponse } from '../../response.interface';
 import { ITechnologyItem } from '../../technologies/technology-items/technology-item.interface';
 import { ITechnologyType } from '../../technologies/technology-types/technology-type.interface';
+import { ICustomer } from '../customers/customer.interface';
 import { IProject } from '../projects/project.interface';
 import { ITechnologyStack } from './technology-stack.interface';
 
@@ -102,13 +103,23 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
         disabled: true,
       }),
       this.createSelectField({
+        field: 'customerId',
+        label: 'Cliente',
+        placeholder: 'Cliente del proyecto',
+        icon: 'person',
+        loadOptions: this.loadCustomers(),
+        selectionChange: this.loadProjects.bind(this),
+        required: true,
+      }),
+      this.createSelectField({
         field: 'projectId',
         label: 'Proyecto',
         placeholder: 'Proyecto a aplicar',
         icon: 'inventory',
-        loadOptions: this.loadProjects(),
+        loadOptions: new Observable<WritableSignal<ISelectData[]>>(),
         selectionChange: () => of(),
         required: true,
+        disabled: true,
       }),
       this.createNumberField({
         field: 'weight',
@@ -116,10 +127,12 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
         placeholder: 'Peso de la tecnología en el stack tecnológico',
         icon: 'weight',
         options: {
+          defaultValue: 0.0,
           min: 0.0,
           max: 1.0,
           step: 0.01,
         },
+        required: true,
       }),
     ];
 
@@ -201,8 +214,40 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
       );
   }
 
-  private loadProjects(): Observable<WritableSignal<ISelectData[]>> {
+  private loadCustomers(): Observable<WritableSignal<ISelectData[]>> {
     const param = new HttpParams().set('page', '0').set('size', '99999999');
+    return this._http$
+      .get<IResponse<IFindAllResponse<ICustomer>>>(
+        `${environment.endpoint.projectsManagement.customers}`,
+        param
+      )
+      .pipe(
+        map((response) => {
+          return this.mapDataToISelectData(response, {
+            value: 'customerId',
+            label: 'name',
+          });
+        }),
+        catchError((error) =>
+          this.catchError(error, 'Error al cargar los clientes')
+        )
+      );
+  }
+
+  private loadProjects(
+    customerId: string,
+    typeForm: string,
+    form?: WritableSignal<FormGroup>
+  ): Observable<WritableSignal<ISelectData[]>> {
+    form?.update((form) => {
+      form.get('projectId')?.setValue('');
+      form.get('projectId')?.disable();
+      return form;
+    });
+    const param = new HttpParams()
+      .set('page', '0')
+      .set('size', '99999999')
+      .set('filter', customerId);
     return this._http$
       .get<IResponse<IFindAllResponse<IProject>>>(
         `${environment.endpoint.projectsManagement.projects}`,
@@ -213,6 +258,23 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
           const data = this.mapDataToISelectData(response, {
             value: 'projectId',
             label: 'name',
+          });
+
+          if (typeForm == TypeForm.UPDATE) {
+            this._dataForModalUpdate.update((config) => {
+              return this.updateOptions(config, data, 'projectId');
+            });
+          }
+
+          if (typeForm === TypeForm.CREATE) {
+            this._dataForModalCreate.update((config) => {
+              return this.updateOptions(config, data, 'projectId');
+            });
+          }
+
+          form?.update((form) => {
+            form.get('projectId')?.enable();
+            return form;
           });
 
           return data;
@@ -229,6 +291,7 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
     closeForm: Function
   ): void {
     delete config.technologyTypeId;
+    delete config.customerId;
     super.createSubmit(config, form, closeForm);
   }
 
@@ -238,6 +301,7 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
     closeForm: Function
   ): void {
     delete data.technologyTypeId;
+    delete data.customerId;
     super.updateSubmit(data, form, closeForm);
   }
 
@@ -250,6 +314,7 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
   protected override OpenModalForEdit(configuration: ITechnologyStack): void {
     configuration = {
       ...configuration,
+      customerId: configuration.project?.customerId,
       technologyTypeId:
         configuration.technologyItem?.technologyType.technologyTypeId,
     };
@@ -260,6 +325,14 @@ export class TechnologyStackComponent extends GenericCrudComponent<ITechnologySt
           field.formControl().enable();
           field.loadOptions = this.loadItems(
             configuration.technologyTypeId ?? '',
+            TypeForm.UPDATE
+          );
+        }
+
+        if (field.field === 'projectId') {
+          field.formControl().enable();
+          field.loadOptions = this.loadProjects(
+            configuration.project?.customerId ?? '',
             TypeForm.UPDATE
           );
         }

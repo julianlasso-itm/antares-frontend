@@ -13,5 +13,9 @@ export interface ITechnologyStack extends IEntity {
       name: string;
     };
   };
-  project?: { name: string };
+  customerId?: string;
+  project?: {
+    customerId: string;
+    name: string;
+  };
 }
