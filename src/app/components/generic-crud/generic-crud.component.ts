@@ -471,6 +471,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
     placeholder: string;
     icon: string;
     options: {
+      defaultValue?: number;
       min?: number;
       max?: number;
       step?: number;
@@ -496,7 +497,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
       formControl: signal(
         new FormControl(
           {
-            value: null,
+            value: properties.options.defaultValue ?? null,
             disabled: properties.disabled ?? false,
           },
           {
