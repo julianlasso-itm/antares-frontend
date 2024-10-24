@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -26,14 +25,17 @@ import {
   TypeForm,
   TypeInput,
 } from '../modal-for-form/modal-for-form.interface';
+import { AutocompleteComponent } from './autocomplete/autocomplete.component';
+import { DatePickerComponent } from './date-picker/date-picker.component';
 
 @Component({
   selector: 'app-form',
   standalone: true,
   imports: [
+    AutocompleteComponent,
+    DatePickerComponent,
     CommonModule,
     FormsModule,
-    MatAutocompleteModule,
     MatButtonModule,
     MatCheckboxModule,
     MatDatepickerModule,
@@ -107,7 +109,7 @@ export class FormComponent {
     return (option as any).label;
   }
 
-  errorMessage(index: number, field: FormField): string {
+  errorMessage(field: FormField): string {
     if (field.formControl()) {
       const control = this.form().get(field.field);
       for (const key in control?.errors) {

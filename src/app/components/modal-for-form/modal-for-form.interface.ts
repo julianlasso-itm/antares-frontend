@@ -27,6 +27,7 @@ export interface FormField {
   icon?: string;
   formControl: WritableSignal<FormControl>;
   loadOptions?: Observable<WritableSignal<ISelectData[]>>;
+  autocompleteOptions?: (...args: any) => Observable<any>;
   selectionChange?: (...args: any) => Observable<any>;
   options?: Record<string, any>;
   defaultValue?: any;
@@ -53,6 +54,7 @@ export enum TypeError {
 
 export enum TypeInput {
   HIDDEN = 'hidden',
+  AUTOCOMPLETE = 'autocomplete',
   TEXT = 'text',
   EMAIL = 'email',
   TEL = 'tel',

@@ -1,0 +1,20 @@
+<mat-form-field class="width-100 margin-bottom-5">
+  <mat-label>{{ field.label }}</mat-label>
+  <input
+    matInput
+    [placeholder]="field.placeholder ?? ''"
+    [formControl]="getFormControl()"
+    [matDatepicker]="picker"
+    (click)="picker.open()"
+  />
+  <mat-hint>MM/DD/YYYY</mat-hint>
+  <mat-datepicker-toggle matIconSuffix [for]="picker" class="margin-right-5">
+    <mat-icon class="material-symbols-rounded" matDatepickerToggleIcon>
+      {{ field.icon }}
+    </mat-icon>
+  </mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+  @if (this.form().invalid) {
+    <mat-error>{{ errorMessage(field) }}</mat-error>
+  }
+</mat-form-field>

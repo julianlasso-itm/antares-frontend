@@ -1,0 +1,32 @@
+<mat-form-field class="width-100 margin-bottom-5">
+  <mat-label>
+    {{ field.label }}
+  </mat-label>
+  <input
+    matInput
+    #inputAutoComplete
+    type="text"
+    name="{{ field.field }}"
+    placeholder="{{ field.placeholder }}"
+    [formControl]="getFormControl()"
+    [matAutocomplete]="auto"
+    (input)="onInputChange(inputAutoComplete.value)"
+  />
+  <mat-icon class="material-symbols-rounded" matSuffix>
+    {{ field.icon }}
+  </mat-icon>
+  @if (this.form().invalid) {
+    <mat-error>{{ errorMessage(field) }}</mat-error>
+  }
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="onOptionSelected($event.option.value)"
+    [displayWith]="displayWith.bind(this)"
+  >
+    @for (option of filteredOptions(); track $index) {
+      <mat-option [value]="option">
+        {{ option.label }}
+      </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>

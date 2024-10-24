@@ -7,7 +7,7 @@
         <mat-form-field class="width-100 margin-bottom-5">
           <mat-label>{{ field.label }}</mat-label>
           <mat-select
-            formControlName="{{ field.field }}"
+            [formControlName]="field.field"
             (selectionChange)="selectionChange(field, $event.value, this.form)"
           >
           @if (field?.loadOptions | async; as options) {
@@ -20,7 +20,7 @@
           </mat-select>
           <mat-icon class="material-symbols-rounded" matSuffix>{{ field.icon }}</mat-icon>
           @if (this.form().invalid) {
-            <mat-error>{{ errorMessage($index, field) }}</mat-error>
+            <mat-error>{{ errorMessage(field) }}</mat-error>
           }
         </mat-form-field>
       } @case(typeInput.SLIDE_TOGGLE) {
@@ -42,7 +42,7 @@
           ></textarea>
           <mat-icon class="material-symbols-rounded" matSuffix>{{ field.icon }}</mat-icon>
           @if (this.form().invalid) {
-            <mat-error>{{ errorMessage($index, field) }}</mat-error>
+            <mat-error>{{ errorMessage(field) }}</mat-error>
           }
         </mat-form-field>
       } @case (typeInput.NUMBER) {
@@ -60,9 +60,23 @@
           />
           <mat-icon class="material-symbols-rounded" matSuffix>{{ field.icon }}</mat-icon>
           @if (this.form().invalid) {
-            <mat-error>{{ errorMessage($index, field) }}</mat-error>
+            <mat-error>{{ errorMessage(field) }}</mat-error>
           }
         </mat-form-field>
+      } @case (typeInput.AUTOCOMPLETE) {
+        <app-autocomplete
+          [field]="field"
+          [form]="form"
+          [errorMessage]="errorMessage"
+          ngDefaultControl
+        ></app-autocomplete>
+      } @case (typeInput.DATE) {
+        <app-date-picker
+          [field]="field"
+          [form]="form"
+          [errorMessage]="errorMessage"
+          ngDefaultControl
+        ></app-date-picker>
       } @default {
         <mat-form-field class="width-100 margin-bottom-5">
           <mat-label>{{ field.label }}</mat-label>
@@ -75,7 +89,7 @@
           />
           <mat-icon class="material-symbols-rounded" matSuffix>{{ field.icon }}</mat-icon>
           @if (this.form().invalid) {
-            <mat-error>{{ errorMessage($index, field) }}</mat-error>
+            <mat-error>{{ errorMessage(field) }}</mat-error>
           }
         </mat-form-field>
       }

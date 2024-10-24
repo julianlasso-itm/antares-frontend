@@ -125,7 +125,7 @@ export const menuStruct: MenuStruct[] = [
           ).then((component) => component.TechnologyPerRoleComponent),
       },
       {
-        title: 'Profesionales',
+        title: 'Profesionales y Roles',
         path: 'projects/professionals',
         icon: 'groups',
         loadComponent: () =>
