@@ -146,6 +146,8 @@ export class RolePerProfessionalComponent extends GenericCrudComponent<IRolePerP
   }
 
   protected override changeStatusSubmit(data: IRolePerProfessional): void {
+    delete data.role;
+    delete data.professional;
     data.startDate = new Date(data.startDate).toISOString();
     if (data.endDate) {
       const endDate = new Date(data.endDate);
@@ -205,10 +207,10 @@ export class RolePerProfessionalComponent extends GenericCrudComponent<IRolePerP
         configuration.role?.technologyPerRoles[0].technologyStack.project
           .projectId,
       professionalId: {
-        value: configuration.professional?.professionalId,
-        label: configuration.professional?.name,
+        value: configuration.professional?.professionalId ?? '',
+        label: configuration.professional?.name ?? '',
       },
-      roleId: configuration.role?.roleId,
+      roleId: configuration.role?.roleId ?? '',
     };
 
     this._dataForModalUpdate.update((config) => {

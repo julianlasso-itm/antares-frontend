@@ -12,8 +12,8 @@ export interface IRolePerProfessional extends IEntity {
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;
-  role: Role;
-  professional: Professional;
+  role?: Role;
+  professional?: Professional;
 }
 
 interface Role {
