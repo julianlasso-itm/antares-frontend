@@ -100,7 +100,7 @@ export class RolePerProfessionalComponent extends GenericCrudComponent<IRolePerP
         placeholder: 'Proyecto del rol',
         icon: 'inventory',
         loadOptions: new Observable<WritableSignal<ISelectData[]>>(),
-        selectionChange: this.loadRoles.bind(this),
+        selectionChange: this.loadRolesByProject.bind(this),
         required: true,
         disabled: true,
       }),
@@ -244,7 +244,7 @@ export class RolePerProfessionalComponent extends GenericCrudComponent<IRolePerP
 
         if (field.field === 'roleId') {
           field.formControl().enable();
-          field.loadOptions = this.loadRoles(
+          field.loadOptions = this.loadRolesByProject(
             configuration.projectId ?? '',
             TypeForm.UPDATE
           );
@@ -329,7 +329,7 @@ export class RolePerProfessionalComponent extends GenericCrudComponent<IRolePerP
       );
   }
 
-  private loadRoles(
+  private loadRolesByProject(
     projectId: string,
     typeForm: string,
     form?: WritableSignal<FormGroup>
@@ -339,18 +339,15 @@ export class RolePerProfessionalComponent extends GenericCrudComponent<IRolePerP
       form.get('roleId')?.disable();
       return form;
     });
-    const param = new HttpParams()
-      .set('page', '0')
-      .set('size', '99999999')
-      .set('filter', projectId)
-      .set('withDisabled', false);
+    const param = new HttpParams().set('projectId', projectId);
     return this._http$
       .get<IResponse<IFindAllResponse<IRole>>>(
-        `${environment.endpoint.projectsManagement.roles}`,
+        `${environment.endpoint.projectsManagement.technologyPerRole}/find-only-roles-by-project`,
         param
       )
       .pipe(
         map((response) => {
+          console.log('response - roles by project', response);
           const data = this.mapDataToISelectData(response, {
             value: 'roleId',
             label: 'name',
