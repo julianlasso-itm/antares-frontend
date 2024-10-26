@@ -8,6 +8,7 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { OAuthStorage, provideOAuthClient } from 'angular-oauth2-oidc';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { provideToastr } from 'ngx-toastr';
 
 import { routes } from './app.routes';
@@ -37,5 +38,6 @@ export const appConfig: ApplicationConfig = {
       provide: OAuthStorage,
       useFactory: () => AuthStorageService,
     },
+    provideCharts(withDefaultRegisterables()),
   ],
 };
