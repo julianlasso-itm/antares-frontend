@@ -35,7 +35,7 @@ import { IDomainKnowledge } from './domain-knowledge.interface';
 
         app-table {
           min-width: fit-content;
-          width: 75%;
+          width: 100%;
           max-width: 100%;
         }
       }

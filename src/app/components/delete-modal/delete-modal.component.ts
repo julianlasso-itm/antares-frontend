@@ -21,6 +21,11 @@ export class DeleteModalComponent {
     this.close();
   }
 
+  @HostListener('document:keydown.enter', ['$event'])
+  handleEnter(event: KeyboardEvent) {
+    this.closeWithId();
+  }
+
   private readonly _modalStateService = inject(ModalStateService);
   private readonly _dialogRef = inject(MatDialogRef<DeleteModalComponent>);
   readonly _data = inject<IDeleteModalData>(MAT_DIALOG_DATA);

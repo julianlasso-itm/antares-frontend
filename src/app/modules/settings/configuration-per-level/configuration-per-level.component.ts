@@ -32,7 +32,7 @@ import { IConfigurationPerLevel } from './configuration-per-level.interface';
 
         app-table {
           min-width: fit-content;
-          width: 55%;
+          width: 60%;
           max-width: 100%;
         }
       }

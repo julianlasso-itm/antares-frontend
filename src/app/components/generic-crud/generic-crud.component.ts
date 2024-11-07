@@ -26,6 +26,7 @@ import { IAction } from '../table/action.interface';
 import { IDisplayedColumn } from '../table/displayed-columns.interface';
 import { Paginator } from '../table/paginator.class';
 import { IEntity } from './entity.interface';
+import { FullViewportContentService } from '../../services/full-viewport-content.service';
 
 @Component({
   selector: 'app-generic-crud',
@@ -44,6 +45,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
   protected readonly _searchBar$ = inject(SearchBarService);
   protected readonly _notification = inject(ToastrService);
   protected readonly _menuService = inject(MenuService);
+  protected readonly _fullViewportContent$ = inject(FullViewportContentService);
   protected _urlBackend: string;
   protected _errorMessageLoad: string;
   protected _titleForModal: { create: string; update: string; delete: string };
@@ -96,6 +98,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
     this._updateSuccessMessage = '';
     this._updateErrorMessage = '';
     this._filter = signal('');
+    this._fullViewportContent$.fullViewportContent = false;
   }
 
   ngOnInit(): void {

@@ -31,7 +31,7 @@ import { ITechnologyItem } from './technology-item.interface';
 
         app-table {
           min-width: fit-content;
-          width: 65%;
+          width: 100%;
           max-width: 100%;
         }
       }

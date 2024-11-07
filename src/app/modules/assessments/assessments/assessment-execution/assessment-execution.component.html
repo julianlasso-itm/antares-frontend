@@ -1,0 +1,89 @@
+<form class="content" [formGroup]="formAssessment()">
+  <div class="assessment">
+    <mat-vertical-stepper [linear]="false" #stepper (selectionChange)="selectionChanged($event)">
+      <ng-template matStepperIcon="edit" let-index="index">
+        {{ index + 1 }}
+      </ng-template>
+      <ng-template matStepperIcon="done">
+        <mat-icon class="material-symbols-rounded">done_all</mat-icon>
+      </ng-template>
+
+      @for (technologyItem of getQuestionsAndAnswersAsArray(); track $index) {
+        <mat-step [id]="technologyItem.technologyTypeId">
+          <ng-template matStepLabel class="ellipsis"
+            >{{ technologyItem.name }}
+            {{
+              getDescriptionFromTechnologyItem(technologyItem)
+                ? "(" + technologyItem.description + ")"
+                : ""
+            }}</ng-template
+          >
+
+          @for (domainKnowledge of technologyItem.domainKnowledges; track $index) {
+            <div class="domain">
+              <h1 class="title">{{ domainKnowledge.domain }}</h1>
+              <p class="description">{{ domainKnowledge.topic }}</p>
+              <div class="buttons-container">
+                <mat-button-toggle-group
+                  class="buttons"
+                  (valueChange)="ratingScaleValueChanged($event, technologyItem)"
+                  formControlName="{{ domainKnowledge.domainKnowledgeId }}_score"
+                  name="{{ domainKnowledge.domainKnowledgeId }}_score"
+                >
+                  @for (ratingScale of getRatingScaleValue(); track $index) {
+                    <mat-button-toggle value="{{ ratingScale.value }}">{{
+                      ratingScale.name
+                    }}</mat-button-toggle>
+                  }
+                </mat-button-toggle-group>
+              </div>
+              <div class="observations">
+                <mat-form-field
+                  class="width-100 margin-bottom-5"
+                >
+                  <mat-label>Observaciones</mat-label>
+                  <textarea
+                    matInput
+                    maxlength="8192"
+                    formControlName="{{ domainKnowledge.domainKnowledgeId }}_observations"
+
+                    (input)="onInputChange($event, domainKnowledge.domainKnowledgeId)"
+                  >
+                  </textarea>
+                  <mat-hint align="end">
+                    {{ getLengthObservation(domainKnowledge.domainKnowledgeId) }} / 8192
+                  </mat-hint>
+                  <mat-error>La observación no debe exceder los 8192 caracteres</mat-error>
+                </mat-form-field>
+                <div class="buttons">
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    (click)="
+                      openDialogQuestionsAndAnswers(
+                        domainKnowledge.domainQuestionsAnswers
+                      )
+                    "
+                    [disabled]="domainKnowledge.domainQuestionsAnswers.length === 0"
+                  >
+                    PREGUNTAS Y RESPUESTAS
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </mat-step>
+      }
+    </mat-vertical-stepper>
+  </div>
+  <div class="graph">
+    <canvas
+      baseChart
+      [datasets]="radarChartDatasets()"
+      [options]="radarChartOptions()"
+      [labels]="radarChartLabels()"
+      [type]="radarChartType()"
+    >
+    </canvas>
+  </div>
+</form>

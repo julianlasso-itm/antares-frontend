@@ -37,13 +37,20 @@ body {
   height: 100%;
 }
 
-.tippy-box[data-theme~=dark].custom-class-tooltip {
+.tippy-box[data-theme~="dark"].custom-class-tooltip {
   background-color: #222;
   color: #fff;
 
   .tippy-arrow {
     color: #222;
   }
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 ::-webkit-scrollbar {

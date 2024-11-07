@@ -2,10 +2,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
-  InMemoryScrollingFeature,
   InMemoryScrollingOptions,
   provideRouter,
+  withComponentInputBinding,
   withInMemoryScrolling,
+  withViewTransitions,
 } from '@angular/router';
 import { OAuthStorage, provideOAuthClient } from 'angular-oauth2-oidc';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
@@ -20,13 +21,17 @@ const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
 };
 
-const inMemoryScrollingFeature: InMemoryScrollingFeature =
-  withInMemoryScrolling(scrollConfig);
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, inMemoryScrollingFeature),
+    provideRouter(
+      routes,
+      withInMemoryScrolling(scrollConfig),
+      withComponentInputBinding(),
+      withViewTransitions({
+        skipInitialTransition: true,
+      })
+    ),
     provideAnimationsAsync(),
     provideToastr({
       maxOpened: 4,

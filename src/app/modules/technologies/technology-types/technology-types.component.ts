@@ -26,7 +26,7 @@ import { ITechnologyType } from './technology-type.interface';
 
         app-table {
           min-width: fit-content;
-          width: 55%;
+          width: 100%;
           max-width: 100%;
         }
       }

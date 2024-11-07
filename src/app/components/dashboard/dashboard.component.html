@@ -2,40 +2,71 @@
   @if (showProgressBar()) {
     <mat-progress-bar mode="indeterminate" class="progress-bar"></mat-progress-bar>
   }
-  <app-menu-icon class="menu-icon"></app-menu-icon>
-  <app-menu class="menu"></app-menu>
+  @if (!fullViewportContent()) {
+    <app-menu-icon class="menu-icon"></app-menu-icon>
+    <app-menu class="menu"></app-menu>
+  }
   <div class="main-content">
-    <app-header class="header" [logOut]="logOut.bind(this)"></app-header>
+    @if (!fullViewportContent()) {
+      <app-header class="header" [logOut]="logOut.bind(this)"></app-header>
+    }
     <div class="container">
-      <div class="main">
-        <div class="title">
-          <h1>{{ title() }}</h1>
-          <div class="spacer"></div>
-          <div class="actions">
-            @if (buttonAssistantVisible()) {
-              <button
-                mat-icon-button
-                (click)="buttonAssistantAction()()"
-                ngxTippy="Asistente"
-                [tippyClassName]="customClassTooltip"
-                [tippyProps]="tooltipsProps"
-              >
-                <mat-icon svgIcon="sparkles"></mat-icon>
-              </button>
-            }
-            @if (buttonAddVisible()) {
-              <button
-                mat-flat-button
-                color="primary"
-                (click)="buttonAddAction()()"
-              >
-                <mat-icon class="material-symbols-rounded">add</mat-icon>
-                Agregar
-              </button>
-            }
+      <div class="main" ngClass="{{ fullViewportContent() ? 'full-viewport-content' : '' }}">
+        <div class="title" ngClass="{{ fullViewportContent() ? 'full-viewport' : '' }}">
+          <div>
+            <h1>{{ title() }}</h1>
+            <div class="spacer"></div>
+            <div class="actions">
+
+              @if (buttonAssistantVisible()) {
+                <button
+                  mat-icon-button
+                  (click)="buttonAssistantAction()()"
+                  ngxTippy="Asistente"
+                  [tippyClassName]="customClassTooltip"
+                  [tippyProps]="tooltipsProps"
+                >
+                  <mat-icon svgIcon="sparkles"></mat-icon>
+                </button>
+              }
+
+              @if (buttonPartialSaveVisible()) {
+                <button
+                  mat-flat-button color="primary"
+                  (click)="buttonPartialSaveAction()()"
+                  [disabled]="!buttonPartialSaveEnabled()"
+                >
+                  <mat-icon class="material-symbols-rounded">save</mat-icon>
+                  PARCIAL
+                </button>
+              }
+
+              @if (buttonSaveAndFinishVisible()) {
+                <button
+                  mat-flat-button color="primary"
+                  (click)="buttonSaveAndFinishAction()()"
+                  [disabled]="!buttonSaveAndFinishEnabled()"
+                >
+                  <mat-icon class="material-symbols-rounded">done_all</mat-icon>
+                  FINALIZAR
+                </button>
+              }
+
+              @if (buttonAddVisible()) {
+                <button
+                  mat-flat-button
+                  color="primary"
+                  (click)="buttonAddAction()()"
+                >
+                  <mat-icon class="material-symbols-rounded">add</mat-icon>
+                  AGREGAR
+                </button>
+              }
+
+            </div>
           </div>
+          <mat-divider></mat-divider>
         </div>
-        <mat-divider></mat-divider>
         <div class="content">
           <router-outlet />
         </div>

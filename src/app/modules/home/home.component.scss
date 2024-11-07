@@ -1,3 +1,16 @@
+.background {
+  position: absolute;
+  width: 79dvw;
+  height: 84dvh;
+  overflow: hidden;
+  z-index: -1;
+  background-color: var(--mat-app-background-color);
+  background-image: url('../../../../public/images/background.webp');
+  background-size: cover;
+  background-position: center;
+  transition: background-image 150ms ease-in-out;
+}
+
 .professional {
   padding: 8px;
   display: flex;

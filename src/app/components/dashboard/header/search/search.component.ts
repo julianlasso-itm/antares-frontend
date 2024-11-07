@@ -42,7 +42,7 @@ export class SearchComponent {
     });
     this._clearSubscription = this._searchBar$.clear$.subscribe({
       next: (clear) => {
-        if (clear) {
+        if (clear && this.searchInput) {
           this.searchInput.nativeElement.value = '';
         }
       },

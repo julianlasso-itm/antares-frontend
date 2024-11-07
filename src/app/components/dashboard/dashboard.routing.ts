@@ -26,5 +26,23 @@ routesDashboard.push({
     ),
 });
 
+routesDashboard.push({
+  path: 'assessment-history/:rolePerProfessionalId',
+  title: 'Historial de evaluaciones',
+  loadComponent: () =>
+    import(
+      '../../modules/assessments/assessments/assessment-history/assessment-history.component'
+    ).then((component) => component.AssessmentHistoryComponent),
+});
+
+routesDashboard.push({
+  path: 'assessment-execution/:rolePerProfessionalId',
+  title: 'Evaluación de ',
+  loadComponent: () =>
+    import(
+      '../../modules/assessments/assessments/assessment-execution/assessment-execution.component'
+    ).then((component) => component.AssessmentExecutionComponent),
+});
+
 routesDashboard.push({ path: '', redirectTo: 'dashboard', pathMatch: 'full' });
 routesDashboard.push({ path: '**', redirectTo: 'dashboard' });

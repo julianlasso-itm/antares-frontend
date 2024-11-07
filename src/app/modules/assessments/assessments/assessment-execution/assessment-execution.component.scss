@@ -1,0 +1,56 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: start;
+
+  .assessment {
+    flex-grow: 1;
+    width: calc(50dvmax - 16px - 12px);
+    height: 100%;
+
+    .domain {
+      border: 0px solid #c3c3c3;
+      background-color: var(
+        --mdc-filled-text-field-container-color,
+        var(--mat-app-surface-variant)
+      );
+      padding: 16px;
+      border-radius: 16px;
+      margin-top: 24px;
+
+      .title {
+        font-size: 24px;
+        margin-top: 0px;
+        font-weight: 500;
+      }
+
+      .description {
+        line-height: 1.6;
+      }
+
+      .buttons-container {
+        text-align: center;
+        margin-bottom: 16px;
+
+        .buttons {
+          background-color: var(--mat-app-background-color);
+        }
+      }
+
+      .observations {
+        .buttons {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .graph {
+    flex-grow: 1;
+    width: calc(50dvmax - 16px - 12px);
+    height: 100%;
+    position: sticky;
+    top: calc(65px + 16px);
+  }
+}

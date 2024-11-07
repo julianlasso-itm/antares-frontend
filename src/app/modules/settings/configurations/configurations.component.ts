@@ -28,7 +28,7 @@ import { IConfiguration } from './configuration.interface';
 
         app-table {
           min-width: fit-content;
-          width: 40%;
+          width: 60%;
           max-width: 100%;
         }
       }

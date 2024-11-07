@@ -4,6 +4,7 @@ export const environment = {
   endpoint: {
     assessments: {
       assessments: '/assessments/assessments',
+      assessmentPartialSave: '/assessments/assessments/assessment-partial-save',
       configurationPerLevel: '/assessments/configuration-per-level',
       configurations: '/assessments/configuration-levels',
       domainAssessmentScores: '/assessments/domain-assessment-scores',
@@ -12,6 +13,8 @@ export const environment = {
       domainQuestionsAnswers: '/assessments/domain-questions-answers',
       findOne: {
         domainKnowledgeLevels: '/assessments/domain-knowledge-levels/find-one',
+        fullConfiguration:
+          '/assessments/configuration-levels/full-configuration',
       },
       levels: '/assessments/levels',
       ratingScale: '/assessments/rating-scale',

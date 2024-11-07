@@ -117,14 +117,7 @@ export class TechnologyPerRoleComponent extends GenericCrudComponent<ITechnology
         required: true,
         disabled: true,
       }),
-      this.createTextField({
-        field: 'technologyStackId',
-        label: 'Stack tecnológico',
-        placeholder: 'Stack tecnológico',
-        icon: 'layers',
-        maxLength: 500,
-        required: true,
-      }),
+      this.createHiddenField('technologyStackId'),
       this.createSelectField({
         field: 'roleId',
         label: 'Rol',

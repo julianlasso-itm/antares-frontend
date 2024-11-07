@@ -78,19 +78,86 @@ export class TableComponent implements OnInit {
   }
 
   getElementColumn(element: any, index: number): string | null {
-    if (this.columns()[index].field.includes('.')) {
-      const fields = this.columns()[index].field.split('.');
-      for (const field of fields) {
-        element = element[field] ?? '';
-      }
-      return element.length > 40 ? element.slice(0, 40) + '...' : element;
-    }
-    const value = element[this.columns()[index].field];
-    if (value) {
-      return value.length > 40 ? value.slice(0, 40) + '...' : value;
-    }
-    return null;
+    const field = this.columns()[index].field;
+    const value = this.getNestedValue(element, field);
+    return this.formatValue(value);
   }
+
+  private getNestedValue(obj: any, path: string): any {
+    return path.split('.').reduce((value, key) => {
+      if (value === null || value === undefined) return null;
+      if (key.includes('[')) {
+        return this.handleArrayAccess(value, key);
+      }
+      return value[key];
+    }, obj);
+  }
+
+  private handleArrayAccess(value: any, key: string): any {
+    const parts = key.split(/[\[\]]+/).filter(Boolean);
+    return parts.reduce((currentValue, part, index) => {
+      if (index % 2 === 0) {
+        return currentValue[part];
+      } else {
+        const arrayIndex = parseInt(part);
+        return currentValue[arrayIndex];
+      }
+    }, value);
+  }
+
+  private formatValue(value: any): string | null {
+    if (value === null || value === undefined) return null;
+    const stringValue = String(value);
+    return this.truncateString(stringValue, 40);
+  }
+
+  private truncateString(str: string, maxLength: number): string {
+    return str.length > maxLength ? str.slice(0, maxLength) + '...' : str;
+  }
+
+  // getElementColumn(element: any, index: number): string | null {
+  //   const field = this.columns()[index].field;
+  //   console.log('field', field);
+
+  //   let value = element;
+  //   const fields = field.split('.');
+
+  //   for (const f of fields) {
+  //     if (value === null || value === undefined) {
+  //       return null;
+  //     }
+
+  //     if (f.includes('[')) {
+  //       // Handle array access, possibly multiple times
+  //       const parts = f.split(/[\[\]]+/).filter(Boolean);
+  //       let currentValue = value;
+  //       for (let i = 0; i < parts.length; i++) {
+  //         if (i % 2 === 0) {
+  //           // Even indexes are property names
+  //           currentValue = currentValue[parts[i]];
+  //         } else {
+  //           // Odd indexes are array indices
+  //           const arrayIndex = parseInt(parts[i]);
+  //           currentValue = currentValue[arrayIndex];
+  //         }
+  //       }
+  //       value = currentValue;
+  //     } else {
+  //       value = value[f];
+  //     }
+  //   }
+
+  //   if (typeof value === 'string') {
+  //     return value.length > 40 ? value.slice(0, 40) + '...' : value;
+  //   } else if (value !== null && value !== undefined) {
+  //     const stringValue = String(value);
+  //     return stringValue.length > 40
+  //       ? stringValue.slice(0, 40) + '...'
+  //       : stringValue;
+  //   }
+
+  //   return null;
+  // }
 
   getTextForTooltip(element: any, index: number): string | null {
     const value = this.getElementColumn(element, index);

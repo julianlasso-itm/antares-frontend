@@ -167,15 +167,15 @@ export const menuStruct: MenuStruct[] = [
             './modules/domain-knowledge/domain-knowledge/domain-knowledge.component'
           ).then((component) => component.DomainKnowledgeComponent),
       },
-      {
-        title: 'Dom. de con. por nivel',
-        path: 'technologies/domain-knowledge-levels',
-        icon: 'host',
-        loadComponent: () =>
-          import(
-            './modules/domain-knowledge/domain-knowledge-levels/domain-knowledge-levels.component'
-          ).then((component) => component.DomainKnowledgeLevelsComponent),
-      },
+      // {
+      //   title: 'Dom. de con. por nivel',
+      //   path: 'technologies/domain-knowledge-levels',
+      //   icon: 'host',
+      //   loadComponent: () =>
+      //     import(
+      //       './modules/domain-knowledge/domain-knowledge-levels/domain-knowledge-levels.component'
+      //     ).then((component) => component.DomainKnowledgeLevelsComponent),
+      // },
       {
         title: 'Preguntas y respuestas',
         path: 'technologies/domain-questions-answers',
@@ -234,15 +234,15 @@ export const menuStruct: MenuStruct[] = [
             (component) => component.RatingScaleComponent
           ),
       },
-      {
-        title: 'Usuarios',
-        path: 'settings/users',
-        icon: 'people',
-        loadComponent: () =>
-          import('./modules/security/users/users.component').then(
-            (component) => component.SecurityUsersComponent
-          ),
-      },
+      // {
+      //   title: 'Usuarios',
+      //   path: 'settings/users',
+      //   icon: 'people',
+      //   loadComponent: () =>
+      //     import('./modules/security/users/users.component').then(
+      //       (component) => component.SecurityUsersComponent
+      //     ),
+      // },
     ],
   },
 ];
