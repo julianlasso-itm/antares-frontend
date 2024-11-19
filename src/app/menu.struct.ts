@@ -54,24 +54,24 @@ export const menuStruct: MenuStruct[] = [
             './modules/assessments/assessments/assessments.component'
           ).then((component) => component.AssessmentsComponent),
       },
-      {
-        title: 'Brechas de conocimiento',
-        path: 'knowledge-gaps/gaps',
-        icon: 'network_intelligence_history',
-        loadComponent: () =>
-          import(
-            './modules/knowledge-gaps/knowledge-gaps/knowledge-gaps.component'
-          ).then((component) => component.KnowledgeGapsComponent),
-      },
-      {
-        title: 'Seguimiento de brechas',
-        path: 'knowledge-gaps/notes',
-        icon: 'network_intelligence_update',
-        loadComponent: () =>
-          import(
-            './modules/knowledge-gaps/knowledge-gap-notes/knowledge-gap-notes.component'
-          ).then((component) => component.KnowledgeGapNotesComponent),
-      },
+      // {
+      //   title: 'Brechas de conocimiento',
+      //   path: 'knowledge-gaps/gaps/:professionalId',
+      //   icon: 'network_intelligence_history',
+      //   loadComponent: () =>
+      //     import(
+      //       './modules/knowledge-gaps/knowledge-gaps/knowledge-gaps.component'
+      //     ).then((component) => component.KnowledgeGapsComponent),
+      // },
+      // {
+      //   title: 'Seguimiento de brechas',
+      //   path: 'knowledge-gaps/notes',
+      //   icon: 'network_intelligence_update',
+      //   loadComponent: () =>
+      //     import(
+      //       './modules/knowledge-gaps/knowledge-gap-notes/knowledge-gap-notes.component'
+      //     ).then((component) => component.KnowledgeGapNotesComponent),
+      // },
     ],
   },
   {

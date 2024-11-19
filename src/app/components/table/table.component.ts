@@ -46,9 +46,24 @@ import { Paginator } from './paginator.class';
   styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit {
-  @Input() columns: Signal<IDisplayedColumn[]>;
-  @Input() dataSource: WritableSignal<Object[]>;
-  @Input() paginator: WritableSignal<Paginator>;
+  @Input({
+    required: true,
+  })
+  columns: Signal<IDisplayedColumn[]>;
+
+  @Input()
+  transformers: Signal<Function[]>;
+
+  @Input({
+    required: true,
+  })
+  dataSource: WritableSignal<Object[]>;
+
+  @Input({
+    required: true,
+  })
+  paginator: WritableSignal<Paginator>;
+
   @Output() pageEvent: EventEmitter<PageEvent>;
 
   displayedColumns: Signal<string[]>;
@@ -58,6 +73,7 @@ export class TableComponent implements OnInit {
   constructor() {
     this.columns = signal([]);
     this.dataSource = signal([{}]);
+    this.transformers = signal([]);
     this.displayedColumns = signal([]);
     this.paginator = signal(new Paginator());
     this.pageEvent = new EventEmitter<PageEvent>();
@@ -78,6 +94,10 @@ export class TableComponent implements OnInit {
   }
 
   getElementColumn(element: any, index: number): string | null {
+    if (this.transformers().length > 0 && this.transformers()[index]) {
+      return this.transformers()[index](element);
+    }
+
     const field = this.columns()[index].field;
     const value = this.getNestedValue(element, field);
     return this.formatValue(value);

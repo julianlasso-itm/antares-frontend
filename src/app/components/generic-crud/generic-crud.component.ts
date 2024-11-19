@@ -59,7 +59,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
   protected _createErrorMessage: string;
   protected _updateSuccessMessage: string;
   protected _updateErrorMessage: string;
-  protected readonly _filter: WritableSignal<string>;
+  protected readonly _filter: WritableSignal<string | Record<string, string>>;
   protected _dataForModalCreate!: WritableSignal<
     MatDialogConfig<IModalForForm<Entity>>
   >;
@@ -68,6 +68,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
   >;
   readonly dataSource: WritableSignal<Entity[]>;
   readonly displayedColumns: WritableSignal<Array<IDisplayedColumn>>;
+  readonly transformers: WritableSignal<Function[]>;
   readonly loading: WritableSignal<boolean>;
   readonly paginator: WritableSignal<Paginator>;
 
@@ -79,6 +80,7 @@ export class GenericCrudComponent<Entity extends IEntity> {
     this._searchBarSubscription = new Subscription();
     this._numberOfSearches = signal(0);
     this.displayedColumns = signal([]);
+    this.transformers = signal([]);
     this._urlBackend = '';
     this._searchBar$.placeholder = '';
     this._errorMessageLoad = '';
@@ -144,8 +146,9 @@ export class GenericCrudComponent<Entity extends IEntity> {
         .set('page', '0')
         .set('size', this.paginator().pageSize.toString())
         .set('search', search);
-      if (this._filter() !== '') {
-        params = params.set('filter', this._filter());
+      const filter = this._filter();
+      if (typeof filter === 'string' && filter !== '') {
+        params = params.set('filter', filter);
       }
 
       this._http$
@@ -204,8 +207,9 @@ export class GenericCrudComponent<Entity extends IEntity> {
     let params = new HttpParams()
       .set('page', this.paginator().pageIndex.toString())
       .set('size', this.paginator().pageSize.toString());
-    if (this._filter() !== '') {
-      params = params.set('filter', this._filter());
+    const filter = this._filter();
+    if (typeof filter === 'string' && filter !== '') {
+      params = params.set('filter', filter);
     }
     this._http$
       .get<IResponse<IFindAllResponse<Entity>>>(this._urlBackend, params)
@@ -351,8 +355,9 @@ export class GenericCrudComponent<Entity extends IEntity> {
     });
     this._operationBackend$.visible = true;
     let params = new HttpParams();
-    if (this._filter() !== '') {
-      params = params.set('filter', this._filter());
+    const filter = this._filter();
+    if (typeof filter === 'string' && filter !== '') {
+      params = params.set('filter', filter);
     }
     this._http$
       .post<Entity, IResponse<Entity>>(this._urlBackend, config, params)
@@ -838,8 +843,8 @@ export class GenericCrudComponent<Entity extends IEntity> {
   }
 
   protected mapDataToISelectData<IType>(
-    response: IResponse<IFindAllResponse<IType>>,
-    record: { value: string; label: string },
+    response: IResponse<IFindAllResponse<IType>> | IResponse<IType[]>,
+    record: { value: string; label: string, transformer?: Function },
     defaultValue?: ISelectData
   ): WritableSignal<ISelectData[]> {
     const getValueByPath = (obj: Record<string, any>, path: string): any => {
@@ -854,9 +859,19 @@ export class GenericCrudComponent<Entity extends IEntity> {
       );
     }
 
-    response.value.data.forEach((type) => {
+    let array: IType[] = [];
+    if (Array.isArray(response.value)) {
+      array = response.value;
+    } else {
+      array = response.value.data;
+    }
+
+    array.forEach((type) => {
       const value = getValueByPath(type as Record<string, any>, record.value);
-      const label = getValueByPath(type as Record<string, any>, record.label);
+      let label = getValueByPath(type as Record<string, any>, record.label);
+      if (record.transformer) {
+        label = record.transformer(label, type);
+      }
       const key = `${value}-${label}`;
 
       if (!uniqueDataMap.has(key)) {

@@ -1,4 +1,5 @@
 export interface IAssessmentData {
+  assessmentId: string | null;
   configurationLevelId: string;
   domainKnowledges: IDomainKnowledgeData[];
   observations: string;

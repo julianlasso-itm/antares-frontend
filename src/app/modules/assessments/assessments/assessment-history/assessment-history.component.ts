@@ -48,6 +48,28 @@ export class AssessmentHistoryComponent extends GenericCrudComponent<IAssessment
     this._searchBar$.disabled = true;
     this._menuService.title = 'Historial de evaluaciones';
     this._urlBackend = `${environment.endpoint.assessments.assessments}`;
+    const transformers = new Array<Function>();
+    transformers[0] = (element: IAssessment) => {
+      return Number(element.score).toFixed(2);
+    };
+    transformers[1] = (element: IAssessment) => {
+      return new Date(element.startDate).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    };
+    transformers[2] = (element: IAssessment) => {
+      if (element.endDate) {
+        return new Date(element.endDate).toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+      }
+      return element.endDate;
+    };
+    this.transformers.set(transformers);
   }
 
   protected override OpenModalForCreate(): void {

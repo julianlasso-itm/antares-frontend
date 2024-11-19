@@ -381,6 +381,7 @@ export class AssessmentExecutionComponent {
   private createDataForSave(): IAssessmentData {
     // Build base assessment data
     const assessmentData: IAssessmentData = {
+      assessmentId: this._getFormValue('assessmentId'),
       userId: this._getFormValue('userId'),
       observations: this._getFormValue('observations'),
       score: Number(this._getFormValue('score')),
@@ -529,56 +530,104 @@ export class AssessmentExecutionComponent {
 
   private createForm(): void {
     this.formAssessment.update((form) => {
-      form.addControl('assessmentId', new FormControl(null));
+      const assessment = this._questionsAndAnswers()?.assessments;
+
+      const assessmentId = assessment?.at(0)?.assessmentId ?? null;
+      form.addControl('assessmentId', new FormControl(assessmentId));
+
+      const rolePerProfessionalId =
+        assessment?.at(0)?.rolePerProfessionalId ?? this.rolePerProfessionalId;
       form.addControl(
         'rolePerProfessionalId',
-        new FormControl(this.rolePerProfessionalId, {
+        new FormControl(rolePerProfessionalId, {
           nonNullable: true,
           validators: [Validators.required],
         })
       );
+
+      const userId = assessment?.at(0)?.userId ?? '123';
       form.addControl(
         'userId',
-        new FormControl('123', {
+        new FormControl(userId, {
           nonNullable: true,
           validators: [Validators.required],
         })
       );
-      form.addControl('observations', new FormControl(null));
+
+      const observations = assessment?.at(0)?.observations ?? null;
+      form.addControl('observations', new FormControl(observations));
+
+      const score = assessment?.at(0)?.score ?? '0.00';
       form.addControl(
         'score',
-        new FormControl('0.00', {
+        new FormControl(score, {
           nonNullable: true,
           validators: [Validators.required],
         })
       );
+
+      const startDate = new Date(assessment?.at(0)?.startDate ?? Date.now());
       form.addControl(
         'startDate',
-        new FormControl(new Date(), {
+        new FormControl(startDate, {
           nonNullable: true,
           validators: [Validators.required],
         })
       );
-      form.addControl('endDate', new FormControl(null));
-      form.addControl('status', new FormControl(true));
+
+      const endDate = new Date(assessment?.at(0)?.endDate ?? Date.now());
+      form.addControl('endDate', new FormControl(endDate));
+
+      const status = assessment?.at(0)?.status ?? true;
+      form.addControl('status', new FormControl(status));
+
       this._questionsAndAnswers().role.technologyPerRoles?.forEach(
-        (technologyPerRole) => {
+        (technologyPerRole, indexTechnologyPerRole) => {
           technologyPerRole.technologyStack.technologyItem.domainKnowledges.forEach(
-            (domainKnowledge) => {
+            (domainKnowledge, indexDomainKnowledge) => {
+              const domainKnowledgeId = domainKnowledge.domainKnowledgeId;
               form.addControl(
                 `${domainKnowledge.domainKnowledgeId}_domainAssessmentScore`,
-                new FormControl(null)
+                new FormControl(domainKnowledgeId)
               );
+
+              const domainKnowledgeScore =
+                this._questionsAndAnswers()
+                  .assessments?.map((assessment) => {
+                    return assessment.domainAssessmentScores.find(
+                      (domainAssessmentScore) => {
+                        return (
+                          domainAssessmentScore.domainKnowledgeId ===
+                          domainKnowledgeId
+                        );
+                      }
+                    );
+                  })
+                  .at(0)?.score ?? null;
               form.addControl(
                 `${domainKnowledge.domainKnowledgeId}_score`,
-                new FormControl(null, {
+                new FormControl(domainKnowledgeScore, {
                   nonNullable: true,
                   validators: [Validators.required],
                 })
               );
+
+              const domainKnowledgeObservations =
+                this._questionsAndAnswers()
+                  .assessments?.map((assessment) => {
+                    return assessment.domainAssessmentScores.find(
+                      (domainAssessmentScore) => {
+                        return (
+                          domainAssessmentScore.domainKnowledgeId ===
+                          domainKnowledgeId
+                        );
+                      }
+                    );
+                  })
+                  .at(0)?.observations ?? null;
               form.addControl(
                 `${domainKnowledge.domainKnowledgeId}_observations`,
-                new FormControl(null, {
+                new FormControl(domainKnowledgeObservations, {
                   validators: [Validators.maxLength(8192)],
                 })
               );
@@ -588,6 +637,17 @@ export class AssessmentExecutionComponent {
       );
       return form;
     });
+
+    if (this._questionsAndAnswers().assessments?.at(0)?.endDate) {
+      this._formAssessmentSubscription =
+        this.formAssessment().statusChanges.subscribe({
+          next: (value) => {
+            this._buttonHeader$.enabledPartialSave = false;
+            this._buttonHeader$.enabledSaveAndFinish = false;
+          },
+        });
+      return;
+    }
 
     this._formAssessmentSubscription =
       this.formAssessment().statusChanges.subscribe({
@@ -634,7 +694,6 @@ export class AssessmentExecutionComponent {
     } else {
       console.error('No se pudo obtener la lista de tecnologías');
     }
-    console.log('technologyItem', technologyItem);
     this._generalLevel.set(this.calculatePercentage(technologyItem));
     this.formAssessment.update((form) => {
       form.get('score')?.setValue(this._generalLevel());

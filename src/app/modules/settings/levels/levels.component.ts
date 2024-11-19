@@ -76,7 +76,8 @@ export class LevelsComponent extends GenericCrudComponent<ILevel> {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    if (this._filter().length > 0) {
+    const filter = this._filter();
+    if (typeof filter === 'string' && filter.length > 0) {
       this.getConfigurationName();
     }
   }

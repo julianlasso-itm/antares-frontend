@@ -63,10 +63,18 @@ export class AssessmentsComponent extends GenericCrudComponent<IRolePerProfessio
     return [
       {
         icon: 'checklist',
-        tooltip: 'Assessments',
+        tooltip: 'Evaluaciones',
         action: this.goToAssessmentHistory.bind(
           this,
           entity.rolePerProfessionalId ?? ''
+        ),
+      },
+      {
+        icon: 'network_intelligence_history',
+        tooltip: 'Brechas de conocimiento',
+        action: this.goToKnowledgeGaps.bind(
+          this,
+          typeof entity.professionalId === 'string' ? entity.professionalId : ''
         ),
       },
     ];
@@ -74,5 +82,12 @@ export class AssessmentsComponent extends GenericCrudComponent<IRolePerProfessio
 
   private goToAssessmentHistory(rolePerProfessionalId: string): void {
     this._router.navigate(['assessment-history', rolePerProfessionalId]);
+  }
+
+  private goToKnowledgeGaps(rolePerProfessionalId: string): void {
+    if (rolePerProfessionalId === '') {
+      return;
+    }
+    this._router.navigate(['knowledge-gaps/gaps', rolePerProfessionalId]);
   }
 }

@@ -4,11 +4,15 @@ export const environment = {
   endpoint: {
     assessments: {
       assessments: '/assessments/assessments',
+      getProfessionalCompletedAssessments:
+        '/assessments/assessments/professional-completed-assessments',
       assessmentPartialSave: '/assessments/assessments/assessment-partial-save',
       configurationPerLevel: '/assessments/configuration-per-level',
       configurations: '/assessments/configuration-levels',
       domainAssessmentScores: '/assessments/domain-assessment-scores',
       domainKnowledge: '/assessments/domain-knowledge',
+      domainKnowledgeByCompletedAssessment:
+        '/assessments/domain-knowledge/completed-assessment',
       domainKnowledgeLevels: '/assessments/domain-knowledge-levels',
       domainQuestionsAnswers: '/assessments/domain-questions-answers',
       findOne: {
@@ -44,6 +48,7 @@ export const environment = {
     },
     technologies: {
       items: '/technologies/items',
+      itemsByCompletedAssessment: '/technologies/items/completed-assessment',
       types: '/technologies/types',
     },
   },

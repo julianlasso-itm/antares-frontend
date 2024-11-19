@@ -44,5 +44,23 @@ routesDashboard.push({
     ).then((component) => component.AssessmentExecutionComponent),
 });
 
+routesDashboard.push({
+  path: 'knowledge-gaps/gaps/:professionalId',
+  title: 'Brechas de conocimiento',
+  loadComponent: () =>
+    import(
+      '../../modules/knowledge-gaps/knowledge-gaps/knowledge-gaps.component'
+    ).then((component) => component.KnowledgeGapsComponent),
+});
+
+routesDashboard.push({
+  path: 'knowledge-gaps/notes/:knowledgeGapId',
+  title: 'Seguimiento de brechas',
+  loadComponent: () =>
+    import(
+      '../../modules/knowledge-gaps/knowledge-gap-notes/knowledge-gap-notes.component'
+    ).then((component) => component.KnowledgeGapNotesComponent),
+});
+
 routesDashboard.push({ path: '', redirectTo: 'dashboard', pathMatch: 'full' });
 routesDashboard.push({ path: '**', redirectTo: 'dashboard' });
